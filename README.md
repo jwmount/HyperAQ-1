@@ -111,4 +111,6 @@ Setup
 
     * Given that not all systems will have the necessary 'gpio' command to actually activate the valves attached to a Raspberry PI3 host, the file 'lib/tasks/gpio_sim.sh' is used.  You must create a symbolic link from the file to one of the folders on your executables PATH.  Test by typing 'which gpio'.  You should be able to see the log output in log/gpio.log.
 
+    * Most of the more complex bits of code have a log file associated with them.  When in use, these files are opened in the log folder.  You can open the file in an editor and uncomment the log function and the various log statements in the file to watch actions take place, recording them for posterity.  See app/hyperloop/operations/water_manager_server.rb as an example.
+
 

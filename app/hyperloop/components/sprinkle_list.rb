@@ -49,6 +49,7 @@ class SprinkleList < Hyperloop::Component
   end
 
   def try_sort
+    # Sort the table if the first element has changed
     if @next_start_time != @sprinkles[0].next_start_time
       @sprinkles.sort_by! {|s| s.next_start_time}
       @next_start_time = @sprinkles[0].next_start_time

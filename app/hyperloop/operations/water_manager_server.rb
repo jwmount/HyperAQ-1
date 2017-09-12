@@ -17,13 +17,13 @@ class WaterManagerServer < Hyperloop::ServerOp
     water_manager_update(params.wm_id)
   end
 
-  LOGFILE = "log/crontab.log"
+  # LOGFILE = "log/crontab.log"
 
-  def log(msg)
-    f = File.open(LOGFILE, 'a')
-    f.write msg
-    f.close
-  end
+  # def log(msg)
+  #   f = File.open(LOGFILE, 'a')
+  #   f.write msg
+  #   f.close
+  # end
 
   def water_manager_update(id)
     wm = WaterManager.find(id)
@@ -43,8 +43,6 @@ class WaterManagerServer < Hyperloop::ServerOp
 
   def arm
     # log "Installing crontab\n"
-    # This is a good place to ensure that all sprinkles have valid next_start_time fields, before any of them become active.
-    # Sprinkle.set_all_next_start_times
     install_crontab
   end
 

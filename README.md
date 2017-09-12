@@ -1,6 +1,6 @@
 # HyperAQ
 
-This is the Hyperloop version of the Aquarius sprinkler server.
+This is the Hyperloop version of the Aquarius sprinkler server, deployed on a RasberryPI 3.
 
 Theory of Operation
 

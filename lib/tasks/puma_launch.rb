@@ -21,24 +21,6 @@ require 'pp'
 #
 #    Therefore, the simplest form(s) of this command are "puma_launch start", and puma_launch stop
 #
-# This is a simple ruby script to manage the launch of a rails app with the puma web server 
-#
-# By convention, puma will default to port 9292. My convention is to default to 2017 for development purposes
-# and the use the default for production
-#
-# Another convention is to default to the development environment option
-#
-# A third convention is to use the --daemon option in all cases, and to use a pid file to stop the server.
-#
-# A fourth convention is to locate the pidfile in the Rails.root/pids folder
-#
-# A fifth convention is to name the pid file by referencing the port and the environment in the name
-# such as pidfile = "#{Rails.root/pids/#{environment}-#{port}.pid"
-# 
-# In addition, there are two aliases ('puma_start' & 'puma_stop', in .bash_aliases) that provide short commands for development testing
-#
-# Therefore, the simplest form(s) of this command are "puma_launch start", and puma_launch stop
-#
 # This command MUST be launched from the root folder of the rails app.
 
 ENVIRONMENTS = %w[development test production]

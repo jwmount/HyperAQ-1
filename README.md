@@ -82,7 +82,7 @@ Components
 
         * HistoryRow
 
-        When a History is active, it's background is marked pale yellow.  When it is idle, its background in plain.
+        When a History is active, it's background is marked pale yellow.  When it is idle, its background is plain.
 
 Operations
 
@@ -91,7 +91,7 @@ Operations
     This operation is a ServerOp, which means that it gets invoked from the UI, by means of a Standby/Active push button on the navbar.
     When the button is pushed from Standby, this agent will cause a new crontab file to be built from the existing list of Sprinkles, with an entry at the scheduled turn-on time, and again at the scheduled turn-off time (start_time + duration).  The WaterManager state is set to Active, and the button changes color to orange.  For each Sprinkle on/off sequence, a History (List) record is created to record the activity.
 
-    In order to stop all scheduled sprinkles, push the Active button and watch it go to Standby.  Manual valve operation is still available.
+    In order to stop all scheduled sprinkles, push the Active button and watch it go to Standby.  Manual valve operations are still available.
 
   * ManualValveServer
 
@@ -105,11 +105,9 @@ Setup
 
     * execute the shell command 'dev-run.sh', which will clear all log files, run bundle update, drop the database and rebuild it, including seeds.rb, and finally launch puma in development mode.  
 
-    * you can then press the Standby button and activate the sprinkles in the database, which will start to execute on their appointed schedule (the seeds.rb file contains code that will build a database of 10 sprinkles, starting 2 minutes after seeds.rb is run.  This is to provide a convenient set of time-dependent sprinkles. Once all run, then take down the server and run the script again to get a new sprinkle set.) You should be able to see the valve buttons light up to track scheduled sprinkles at work, and the state color of the sprinkle table will cycle between Next, Idle and Active, while the next_start_time field will update to the next schedule.
+    * you can then press the Standby button and activate the sprinkles in the database, which will start to execute on their appointed schedule (the seeds.rb file contains code that will build a database of 10 sprinkles, starting 2 minutes after seeds.rb is run.  This is to provide a convenient set of time-dependent sprinkles. Once all run, then take down the server and run the script again to get a new sprinkle set.) You should be able to see the valve buttons light up to track scheduled sprinkles at work, and the state color of the sprinkle table will cycle between Idle, Next, and Active, while the next_start_time field will update to the next schedule.
 
     * The valve buttons also work in manual mode; when you push a valve button, the valve turns on and a history record is added with the start time recorded.  Press it again, and the stop time will be added to the history record.
-
-    * Given that not all systems will have the necessary 'gpio' command to actually activate the valves attached to a Raspberry PI3 host, the file 'lib/tasks/gpio_sim.sh' is used.  You must create a symbolic link from the file to one of the folders on your executables PATH.  Test by typing 'which gpio'.  You should be able to see the log output in log/gpio.log.
 
     * Most of the more complex bits of code have a log file associated with them.  When in use, these files are opened in the log folder.  You can open the file in an editor and uncomment the log function and the various log statements in the file to watch actions take place, recording them for posterity.  See app/hyperloop/operations/water_manager_server.rb as an example.
 

@@ -1,0 +1,64 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @valve.name %>
+</p>
+
+<p>
+  <strong>Gpio pin:</strong>
+  <%= @valve.gpio_pin %>
+</p>
+
+<p>
+  <strong>Active sprinkle:</strong>
+  <%= @valve.active_sprinkle_id %>
+</p>
+
+<p>
+  <strong>Active history:</strong>
+  <%= @valve.active_history_id %>
+</p>
+
+<p>
+  <strong>Cpu2bb color:</strong>
+  <%= @valve.cpu2bb_color %>
+</p>
+
+<p>
+  <strong>Bb pin:</strong>
+  <%= @valve.bb_pin %>
+</p>
+
+<p>
+  <strong>Bb2relay color:</strong>
+  <%= @valve.bb2relay_color %>
+</p>
+
+<p>
+  <strong>Relay module:</strong>
+  <%= @valve.relay_module %>
+</p>
+
+<p>
+  <strong>Relay index:</strong>
+  <%= @valve.relay_index %>
+</p>
+
+<p>
+  <strong>Relay2valve color:</strong>
+  <%= @valve.relay2valve_color %>
+</p>
+
+<p>
+  <strong>Cmd:</strong>
+  <%= @valve.cmd %>
+</p>
+
+<p>
+  <strong>Base time:</strong>
+  <%= @valve.base_time %>
+</p>
+
+<%= link_to 'Edit', edit_valve_path(@valve) %> |
+<%= link_to 'Back', valves_path %>

@@ -1,0 +1,77 @@
+<%= form_with(model: valve, local: true) do |form| %>
+  <% if valve.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(valve.errors.count, "error") %> prohibited this valve from being saved:</h2>
+
+      <ul>
+      <% valve.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name, id: :valve_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :gpio_pin %>
+    <%= form.number_field :gpio_pin, id: :valve_gpio_pin %>
+  </div>
+
+  <div class="field">
+    <%= form.label :active_sprinkle_id %>
+    <%= form.number_field :active_sprinkle_id, id: :valve_active_sprinkle_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :active_history_id %>
+    <%= form.number_field :active_history_id, id: :valve_active_history_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :cpu2bb_color %>
+    <%= form.text_field :cpu2bb_color, id: :valve_cpu2bb_color %>
+  </div>
+
+  <div class="field">
+    <%= form.label :bb_pin %>
+    <%= form.number_field :bb_pin, id: :valve_bb_pin %>
+  </div>
+
+  <div class="field">
+    <%= form.label :bb2relay_color %>
+    <%= form.text_field :bb2relay_color, id: :valve_bb2relay_color %>
+  </div>
+
+  <div class="field">
+    <%= form.label :relay_module %>
+    <%= form.number_field :relay_module, id: :valve_relay_module %>
+  </div>
+
+  <div class="field">
+    <%= form.label :relay_index %>
+    <%= form.number_field :relay_index, id: :valve_relay_index %>
+  </div>
+
+  <div class="field">
+    <%= form.label :relay2valve_color %>
+    <%= form.text_field :relay2valve_color, id: :valve_relay2valve_color %>
+  </div>
+
+  <div class="field">
+    <%= form.label :cmd %>
+    <%= form.number_field :cmd, id: :valve_cmd %>
+  </div>
+
+  <div class="field">
+    <%= form.label :base_time %>
+    <%= form.datetime_select :base_time, id: :valve_base_time %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

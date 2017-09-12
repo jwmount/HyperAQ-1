@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  start_time: 2017-09-02 08:10:06
+  start_time_display: MyString
+  stop_time_display: MyString
+  valve_id: 1
+
+two:
+  start_time: 2017-09-02 08:10:06
+  start_time_display: MyString
+  stop_time_display: MyString
+  valve_id: 1

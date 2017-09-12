@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  next_start_time: 2017-08-16 10:02:09
+  state: MyString
+  time_input: MyString
+  duration: 1
+  valve_id: 1
+
+two:
+  next_start_time: 2017-08-16 10:02:09
+  state: MyString
+  time_input: MyString
+  duration: 1
+  valve_id: 1

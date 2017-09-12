@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  gpio_pin: 1
+  active_sprinkle_id: 1
+  active_history_id: 1
+  cpu2bb_color: MyString
+  bb_pin: 1
+  bb2relay_color: MyString
+  relay_module: 1
+  relay_index: 1
+  relay2valve_color: MyString
+  cmd: 1
+  base_time: 2017-08-18 09:00:22
+
+two:
+  name: MyString
+  gpio_pin: 1
+  active_sprinkle_id: 1
+  active_history_id: 1
+  cpu2bb_color: MyString
+  bb_pin: 1
+  bb2relay_color: MyString
+  relay_module: 1
+  relay_index: 1
+  relay2valve_color: MyString
+  cmd: 1
+  base_time: 2017-08-18 09:00:22

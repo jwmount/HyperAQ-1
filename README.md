@@ -4,9 +4,9 @@ This is the Hyperloop version of the Aquarius sprinkler server.
 
 Theory of Operation
 
-  This is an implementation of a standard Ruby-on-Rails app, with a Hyperloop UI.  This rails server was designed to function as a headless server, starting and stopping lawn sprinkler valves, following a pre-planned sequence.  As such, the server does not expect to receive operational instructions from the UI, so the UI role is mostly to wait for scheduled activity, be notified of state changes via hyperloop channels from the server, and keep the UI updated.  As part of this role, the UI uses some simple color-coding to indicate server activity.
+  This is an implementation of a standard Ruby-on-Rails app, with a Hyperloop UI.  This rails server was designed to function as a headless server, starting and stopping lawn sprinkler valves, following a pre-planned sequence.  As such, the server does not expect to receive operational instructions from the UI, so the UI role is mostly to wait for scheduled activity, be notified of state changes via hyperloop channels from the server, and keep the UI updated.  As part of this role, the UI uses some simple color-coding, along with table sorting, to indicate server activity.
 
-  There is some manual intervention required; it is necessary for an operator to select Active mode after the server has been started, and an operator can control the valves manually at all times.
+  There is some manual intervention required: it is necessary for an operator to select Active mode after the server has been started, and an operator can control the valves manually at all times.
 
 Models
 
@@ -16,15 +16,15 @@ Models
 
   * Sprinkle
 
-    A Sprinkle is a calendar object; it identifies a valve, a 'time input' field, such as 'Tue 9:48', and a duration field in minutes.  Sprinkles are mapped into the system crontab, with a crontab entry for each Sprinkle-on and Sprinkle-off.  Sprinkles are weekly objects, so a daily valve sprinkle cycle would be made up of 7 Sprinkle records.
+    A Sprinkle is a calendar object; it identifies a valve, a 'time input' field, such as 'Tue 9:48 am', and a duration field in minutes.  Sprinkles are mapped into the system crontab, with a crontab entry for each Sprinkle-on and Sprinkle-off.  Sprinkles are weekly objects, so a daily valve sprinkle cycle would be made up of 7 Sprinkle records.
 
   * History (List)
 
-    Histories are simple logging objects.  Each History is owned by a Valve, and has two time states: start and stop.  When a Valve goes on, a History object is created with a start time set.  When that Valve goes off, the history object is updated with a stop time and saved for display purposes. BTW: The model name was changed to 'List', to avoid an Opal inflection bug, which produced "Historie".
+    Histories are simple logging objects.  Each History is owned by a Valve, and has two time states: start and stop.  When a Valve goes on, a History object is created with a start time set.  When that Valve goes off, the history object is updated with a stop time and saved for display purposes. BTW: The model name was changed to 'List', to avoid an Opal inflection bug, which produced "Historie", as the singular of "Histories".
 
   * WaterManager
 
-    WaterManager is a singleton, and acts as the manager of the sprinkling schedule.  When the 'Standby' button on the nav bar is pushed, the WaterManager requests the WaterManagerServer, a ServerOp, to build a new crontab from the sprinkles and activate the system for scheduled sprinkling.
+    WaterManager is a singleton, and acts as the manager of the sprinkling schedule.  When the 'Standby' button on the nav bar is pushed, the WaterManager requests the WaterManagerServer, a ServerOp, to build a new crontab from the sprinkles and activate the system for scheduled sprinkling. Conversely, pushing the button marked Active will cause a transition to Standby mode, disabling all scheduled operations.
 
   * Porter
 
@@ -35,6 +35,8 @@ Models
 Components
 
   * App
+  This is the parent Component, it is referenced by config/routes.rb to get the hyperloop image created.
+
     * Navbar
 
       Navbar is based on Bootstrap, as is all of the markup in the app.  The navbar contains 4 sections, defined below.
@@ -43,13 +45,13 @@ Components
 
         PorterStatus reports the server host and port values.  This data is used by the crontab entries that drive the sprinkles.  It is displayed here as a debugging aid to distinguish a production Raspberry PI host versus an Ubuntu development machine.
 
-      * TitleNav
-
-        TitleNav is just a bit of advertising about this system.
-
       * WaterStatus
 
         This is the main manual control. Pressing it to Active will activate the sprinkle scheduling, allowing scheduled sprinkles to proceed.  In Standby mode, no sprinkle scheduling occurs.
+
+      * TitleNav
+
+        TitleNav is just a bit of advertising about this system.
 
       * ValveButtons
 
@@ -63,11 +65,13 @@ Components
 
     * Layout
 
+      This component creates the structure required to display the two major lists of this application.
+
       * SprinkleList
 
-        SprinkleList is intended to display a complete list of scheduled sprinkles.  They are to be sorted so that the next sprinkle to become active is always at the top of the table. 
+        SprinkleList is intended to display a complete list of scheduled sprinkles.  They are to be sorted so that the next sprinkle to become active is always at the top of the table. When a sprinkle sequence completes, the next_start_time field is updated by a week, and the table is sorted so that it goes to the bottom of the list.
 
-        * SpinkleRow
+        * SprinkleRow
 
         At any point in time, there is only one Sprinkle marked Next(rose color).  That is when no sprinkle is in action, and the system is quiet.  The next sprinkle scheduled has the Next state.
         When a sprinkle gets activated, its' state becomes Active(blue).  All other sprinkles are marked Idle(plain).  When an active sprinkle stops sprinkling, its' state goes to Idle, and its next_start_time attribute is updated to its next schedule on/off sequence, and it is sorted to the end of the list.
@@ -97,7 +101,7 @@ Setup
 
   * To get the app installed and running, do the following:
 
-    * edit the config/database.yml file to replace my working credentials with yours.
+    * edit the config/database.yml file to replace my working credentials with yours. Mysql is used, so the mysql server must be installed prior to use.
 
     * execute the shell command 'dev-run.sh', which will clear all log files, run bundle update, drop the database and rebuild it, including seeds.rb, and finally launch puma in development mode.  
 

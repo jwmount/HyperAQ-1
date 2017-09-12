@@ -1,0 +1,21 @@
+MAIL='keburgett@gmail.com'
+31 21 * * 1 sh /home/kenb/Desktop/HyperAQ/lib/tasks/valve_actuator.sh  1  1 localhost:3000 1
+32 21 * * 1 sh /home/kenb/Desktop/HyperAQ/lib/tasks/valve_actuator.sh  1  0 localhost:3000 1
+33 21 * * 1 sh /home/kenb/Desktop/HyperAQ/lib/tasks/valve_actuator.sh  2  1 localhost:3000 2
+34 21 * * 1 sh /home/kenb/Desktop/HyperAQ/lib/tasks/valve_actuator.sh  2  0 localhost:3000 2
+35 21 * * 1 sh /home/kenb/Desktop/HyperAQ/lib/tasks/valve_actuator.sh  3  1 localhost:3000 3
+36 21 * * 1 sh /home/kenb/Desktop/HyperAQ/lib/tasks/valve_actuator.sh  3  0 localhost:3000 3
+37 21 * * 1 sh /home/kenb/Desktop/HyperAQ/lib/tasks/valve_actuator.sh  4  1 localhost:3000 4
+38 21 * * 1 sh /home/kenb/Desktop/HyperAQ/lib/tasks/valve_actuator.sh  4  0 localhost:3000 4
+39 21 * * 1 sh /home/kenb/Desktop/HyperAQ/lib/tasks/valve_actuator.sh  5  1 localhost:3000 5
+40 21 * * 1 sh /home/kenb/Desktop/HyperAQ/lib/tasks/valve_actuator.sh  5  0 localhost:3000 5
+41 21 * * 1 sh /home/kenb/Desktop/HyperAQ/lib/tasks/valve_actuator.sh  1  1 localhost:3000 6
+42 21 * * 1 sh /home/kenb/Desktop/HyperAQ/lib/tasks/valve_actuator.sh  1  0 localhost:3000 6
+43 21 * * 1 sh /home/kenb/Desktop/HyperAQ/lib/tasks/valve_actuator.sh  2  1 localhost:3000 7
+44 21 * * 1 sh /home/kenb/Desktop/HyperAQ/lib/tasks/valve_actuator.sh  2  0 localhost:3000 7
+45 21 * * 1 sh /home/kenb/Desktop/HyperAQ/lib/tasks/valve_actuator.sh  3  1 localhost:3000 8
+46 21 * * 1 sh /home/kenb/Desktop/HyperAQ/lib/tasks/valve_actuator.sh  3  0 localhost:3000 8
+47 21 * * 1 sh /home/kenb/Desktop/HyperAQ/lib/tasks/valve_actuator.sh  4  1 localhost:3000 9
+48 21 * * 1 sh /home/kenb/Desktop/HyperAQ/lib/tasks/valve_actuator.sh  4  0 localhost:3000 9
+49 21 * * 1 sh /home/kenb/Desktop/HyperAQ/lib/tasks/valve_actuator.sh  5  1 localhost:3000 10
+50 21 * * 1 sh /home/kenb/Desktop/HyperAQ/lib/tasks/valve_actuator.sh  5  0 localhost:3000 10

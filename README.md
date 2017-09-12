@@ -2,6 +2,12 @@
 
 This is the Hyperloop version of the Aquarius sprinkler server.
 
+Theory of Operation
+
+  This is an implementation of a standard Ruby-on-Rails app, with a Hyperloop UI.  This rails server was designed to function as a headless server, starting and stopping lawn sprinkler valves, following a pre-planned sequence.  As such, the server does not expect to receive operational instructions from the UI, so the UI role is mostly to wait for scheduled activity, be notified of state changes via hyperloop channels from the server, and keep the UI updated.  As part of this role, the UI uses some simple color-coding to indicate server activity.
+
+  There is some manual intervention required; it is necessary for an operator to select Active mode after the server has been started, and an operator can control the valves manually at all times.
+
 Models
 
   * Valve
@@ -10,7 +16,7 @@ Models
 
   * Sprinkle
 
-    A Sprinkle is a calendar object; it identifies a valve, a 'time input' field, such as 'Tue 9:48', and a duration field in minutes.  Sprinkles are mapped into the system crontab, with a crontab entry for each Sprinkle-on and Sprinkle-off.  Sprinkles are weekly objects, so a daily valve sprinkle would be made up of 7 Sprinkle records.
+    A Sprinkle is a calendar object; it identifies a valve, a 'time input' field, such as 'Tue 9:48', and a duration field in minutes.  Sprinkles are mapped into the system crontab, with a crontab entry for each Sprinkle-on and Sprinkle-off.  Sprinkles are weekly objects, so a daily valve sprinkle cycle would be made up of 7 Sprinkle records.
 
   * History (List)
 
@@ -22,7 +28,7 @@ Models
 
   * Porter
 
-    Porter is a bit peculiar.  The reason for Porter goes to the use of crontab as the source of sprinkle scheduling requests.  A crontab request must be posted against a controller, using an http request, usually a PUT or PATCH.  In order to make this request, the caller must know the complete URL of the server, including the port number in use.  In a rails app, the ONLY known way to access the port number is to reference 'request.port', within a controller processing a request.  Since Hyperloop does not use the rails controllers to access and update the rails models, we have a problem.  So, it was necessary to synthesize a request from within the hyperloop browser image, catch that request in a controller, and extract the port key necessary for other crontab operations.  Porter was created to simply stash the port number of the server, and the hostname of the server host.  It is called Porter because I am a fan of British TV mysteries, many of which are set at Oxford University, where 'porters' are the 'keepers of the keys' of the various Oxford colleges.  
+    Porter is a bit peculiar.  The reason for Porter goes to the use of crontab as the source of sprinkle scheduling requests.  A crontab request must be posted against a controller, using an http request, in this case a PUT request.  In order to make this request, the caller must know the complete URL of the server, including the port number in use.  In a rails app, the ONLY known way to access the port number is to reference 'request.port', within the context of a controller processing a request.  Since Hyperloop does not use the rails controllers to access and update the rails models, we have a problem.  So, it was necessary to synthesize a request from within the hyperloop browser image, catch that request in a controller, and extract the port key necessary for other crontab operations.  Porter was created to simply stash the port number of the server, and the hostname of the server host.  It is called Porter because I am a fan of British TV mysteries, many of which are set at Oxford University, where 'porters' are the 'keepers of the keys' of the various Oxford colleges.  
 
     To get a Porter computed, you make an http(json) get request against the '/porter/1' address, and that request is made in the 'after_mount' method of the PorterStatus component.  The 'show' method of the PortersController does all the dirty work and updates the Porter.first AR record with the right stuff.
 
@@ -79,13 +85,13 @@ Operations
   * WaterManagerServer
 
     This operation is a ServerOp, which means that it gets invoked from the UI, by means of a Standby/Active push button on the navbar.
-    When in Standby, this agent will cause a new crontab file to be built from the existing list of Sprinkles, with an entry at the scheduled turn-on time, and again at the scheduled turn-off time (start_time + duration).  The WaterManager state is set to Active, and the button changes color to orange.  
+    When the button is pushed from Standby, this agent will cause a new crontab file to be built from the existing list of Sprinkles, with an entry at the scheduled turn-on time, and again at the scheduled turn-off time (start_time + duration).  The WaterManager state is set to Active, and the button changes color to orange.  For each Sprinkle on/off sequence, a History (List) record is created to record the activity.
 
     In order to stop all scheduled sprinkles, push the Active button and watch it go to Standby.  Manual valve operation is still available.
 
   * ManualValveServer
 
-    This operation is a ServerOp, invoked from any of the 5 Valve buttons. The valve will change state and the button color will change accordingly.
+    This operation is a ServerOp, invoked from any of the 5 Valve buttons. The valve will change state and the button color will change accordingly.  As in the scheduled case, a History is created to record activity.
 
 Setup
 

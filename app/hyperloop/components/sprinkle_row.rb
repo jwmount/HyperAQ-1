@@ -1,11 +1,8 @@
 require 'models/sprinkle'
 require 'models/valve'
-require 'time'
 
 class SprinkleRow < Hyperloop::Component
   param :sprinkle
-
-  TIME_DISPLAY_STRFTIME = "%a %d %b %l:%M %P"
 
   render do
     TR(class: markup) do
@@ -19,6 +16,7 @@ class SprinkleRow < Hyperloop::Component
     end
   end
 
+  # change color as sprinkle state changes
   def markup
     %w{default danger info}[params.sprinkle.state]
   end

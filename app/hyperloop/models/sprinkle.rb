@@ -83,8 +83,8 @@ class Sprinkle < ApplicationRecord
 
   private
 
-    def time_as_string(t)
-      t.strftime(TIME_INPUT_STRFTIME)
-    end
+    # def time_as_string(t)
+    #   t.strftime(TIME_INPUT_STRFTIME)
+    # end
  
 end

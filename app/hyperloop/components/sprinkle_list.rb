@@ -41,7 +41,7 @@ class SprinkleList < Hyperloop::Component
 
   def mark_next
     # Set the status of the first sprinkle in the list to 'Next'
-    s = Sprinkle.first
+    s = @sprinkles[0]
     if s.state != ACTIVE
       s.state = NEXT
       s.save
@@ -49,7 +49,7 @@ class SprinkleList < Hyperloop::Component
   end
 
   def try_sort
-    # Sort the table if the first element has changed
+    # Sort the table if the first element next_start_time has changed
     if @next_start_time != @sprinkles[0].next_start_time
       @sprinkles.sort_by! {|s| s.next_start_time}
       @next_start_time = @sprinkles[0].next_start_time

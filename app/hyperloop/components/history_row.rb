@@ -16,6 +16,7 @@ class HistoryRow < Hyperloop::Component
     end
   end
 
+  # change color as history state changes
   def markup
     params.list.stop_time_display == ' ' ? 'warning' : 'default'
   end

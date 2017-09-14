@@ -3,13 +3,14 @@ require 'models/valve'
 class ValveButtons < Hyperloop::Component
 
   before_mount do
-    @valves = Valve.all
+    # @valves = Valve.all
   end
 
   def render
+    @valves ||= Valve.all
     UL(class: 'nav navbar-nav navbar-right') do
       @valves.each do |valve|
-        ValveButton(valve: valve)
+        ValveButton(valve_id: valve.id)
       end
     end
   end

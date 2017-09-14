@@ -57,12 +57,6 @@ ActiveRecord::Schema.define(version: 20170902151006) do
     t.integer "gpio_pin"
     t.integer "active_sprinkle_id"
     t.integer "active_history_id"
-    t.string "cpu2bb_color"
-    t.integer "bb_pin"
-    t.string "bb2relay_color"
-    t.integer "relay_module"
-    t.integer "relay_index"
-    t.string "relay2valve_color"
     t.integer "cmd"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

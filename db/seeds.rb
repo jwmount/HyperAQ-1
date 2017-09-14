@@ -18,12 +18,19 @@ WaterManager.create(state: 'Standby')
 #
 Porter.create(host_name: 'did-not-work', port_number: 9999)
 #
-# rails g scaffold Valve name:string pin:integer --force
-atrium = Valve.create(name: 'Atrium', gpio_pin: 7, cmd:0, bb_pin: 27, cpu2bb_color: 'red',         relay_module: 2, relay_index: 1)
-back   = Valve.create(name: 'Back',   gpio_pin:22, cmd:0, bb_pin: 22, cpu2bb_color: 'cream',       relay_module: 1, relay_index: 4)
-deck   = Valve.create(name: 'Deck',   gpio_pin:12, cmd:0, bb_pin: 12, cpu2bb_color: 'brown',       relay_module: 1, relay_index: 1)
-front  = Valve.create(name: 'Front',  gpio_pin:16, cmd:0, bb_pin: 18, cpu2bb_color: 'white-brown', relay_module: 1, relay_index: 3)
-tomato = Valve.create(name: 'Tomato', gpio_pin:18, cmd:0, bb_pin: 16, cpu2bb_color: 'orange',      relay_module: 1, relay_index: 2)
+# remove unused fields, keep for documentation here.
+#
+# atrium = Valve.create(name: 'Atrium', gpio_pin: 7, cmd:0, bb_pin: 27, cpu2bb_color: 'red',         relay_module: 2, relay_index: 1)
+# back   = Valve.create(name: 'Back',   gpio_pin:22, cmd:0, bb_pin: 22, cpu2bb_color: 'cream',       relay_module: 1, relay_index: 4)
+# deck   = Valve.create(name: 'Deck',   gpio_pin:12, cmd:0, bb_pin: 12, cpu2bb_color: 'brown',       relay_module: 1, relay_index: 1)
+# front  = Valve.create(name: 'Front',  gpio_pin:16, cmd:0, bb_pin: 18, cpu2bb_color: 'white-brown', relay_module: 1, relay_index: 3)
+# tomato = Valve.create(name: 'Tomato', gpio_pin:18, cmd:0, bb_pin: 16, cpu2bb_color: 'orange',      relay_module: 1, relay_index: 2)
+
+atrium = Valve.create(name: 'Atrium', gpio_pin: 7, cmd:0)
+back   = Valve.create(name: 'Back',   gpio_pin:22, cmd:0)
+deck   = Valve.create(name: 'Deck',   gpio_pin:12, cmd:0)
+front  = Valve.create(name: 'Front',  gpio_pin:16, cmd:0)
+tomato = Valve.create(name: 'Tomato', gpio_pin:18, cmd:0)
 
 # production sprinkle set; keep updated as watering needs evolve.
 hour = 7
@@ -34,7 +41,7 @@ hour = 7
     s = Sprinkle.create( time_input: "#{day} #{hour}:05 #{meridian}" , duration:  3, valve_id: back.id, state: IDLE)
     s.update(next_start_time: s.start_time, next_start_time_display: s.start_time.strftime(TIME_INPUT_STRFTIME))
     s = Sprinkle.create( time_input: "#{day} #{hour}:10 #{meridian}" , duration:  3, valve_id: deck.id, state: IDLE) unless meridian == 12
-    s.update(next_start_time: s.start_time, next_start_time_display: s.start_time.strftime(TIME_INPUT_STRFTIME))
+    s.update(next_start_time: s.start_time, next_start_time_display: s.start_time.strftime(TIME_INPUT_STRFTIME)) unless meridian == 12
     s = Sprinkle.create( time_input: "#{day} #{hour}:15 #{meridian}" , duration:  3, valve_id: front.id, state: IDLE) #unless meridian == 12
     s.update(next_start_time: s.start_time, next_start_time_display: s.start_time.strftime(TIME_INPUT_STRFTIME))
     s = Sprinkle.create( time_input: "#{day} #{hour}:20 #{meridian}" , duration:  5, valve_id: tomato.id, state: IDLE)

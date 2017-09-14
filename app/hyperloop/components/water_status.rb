@@ -10,7 +10,6 @@
           BUTTON(class: "btn #{system_button_state} navbar-btn") do 
             system_state
           end.on(:click) {state_button_toggled}
-             # .on(:hover) {hover_state}
         end
       end
     end
@@ -18,10 +17,6 @@
     def system_state
       WaterManager.first.state
     end
-
-    # def hover_state
-    #   "We are hovering over the #{system_state} button"
-    # end
 
     def state_button_toggled
       # Note: The state is changed in the following ServerOp, which directly updates the model, and

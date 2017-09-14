@@ -2,22 +2,22 @@ require 'models/sprinkle'
 
 class SprinkleList < Hyperloop::Component
 
-
   before_mount do
     # any initialization particularly of state variables goes here.
     # this will execute on server (prerendering) and client.
     
-    @sprinkles = Sprinkle.all
+    # @sprinkles = Sprinkle.all
     @next_start_time = Time.now
   end
 
   render(DIV) do
     H4 { "Sprinkles"}
 
+    @sprinkles ||= Sprinkle.all
+    
     TABLE(class: 'table') do
       THEAD do
         TR do
-          # TH { " State "}
           TH { " Next Start Time " }          
           TH { " Time input " }
           TH { " Duration" }

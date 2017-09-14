@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(version: 20170902151006) do
 
   create_table "sprinkles", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.datetime "next_start_time"
+    t.string "next_start_time_display"
     t.integer "state"
     t.string "time_input"
     t.integer "duration"

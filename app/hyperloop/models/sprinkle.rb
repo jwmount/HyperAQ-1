@@ -32,13 +32,13 @@ class Sprinkle < ApplicationRecord
   OPEN = 1
   CLOSE = 0
 
-  LOGFILE = "log/sprinkle.log"
+  # LOGFILE = "log/sprinkle.log"
 
-  def log(msg)
-    f = File.open(LOGFILE, 'a')
-    f.write msg
-    f.close
-  end
+  # def log(msg)
+  #   f = File.open(LOGFILE, 'a')
+  #   f.write msg
+  #   f.close
+  # end
 
   #
   # business logic methods

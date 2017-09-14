@@ -15,6 +15,8 @@ class Valve < ApplicationRecord
     NEXT = 1
     ACTIVE = 2
 
+    TIME_INPUT_STRFTIME = "%a %d %b %l:%M %P"
+
     LOGFILE = "log/valve.log"
 
     def log(msg)
@@ -56,7 +58,8 @@ class Valve < ApplicationRecord
       else # stop valve sequence
 
         sprinkle = Sprinkle.find(active_sprinkle_id)
-        sprinkle.update(state: IDLE, next_start_time: sprinkle.start_time)
+        st = sprinkle.start_time
+        sprinkle.update(state: IDLE, next_start_time: st, next_start_time_display: st.strftime(TIME_INPUT_STRFTIME))
         # log "change sprinkle(#{sprinkle.id}) state to #{sprinkle.state}\n"
 
         history = List.find(valve.active_history_id)

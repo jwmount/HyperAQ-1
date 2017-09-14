@@ -9,7 +9,7 @@ class SprinkleRow < Hyperloop::Component
 
   render do
     TR(class: markup) do
-      TD { formatted_time(params.sprinkle.next_start_time)}
+      TD { params.sprinkle.next_start_time_display }
     
       TD { params.sprinkle.time_input }    
     
@@ -23,11 +23,4 @@ class SprinkleRow < Hyperloop::Component
     %w{default danger info}[params.sprinkle.state]
   end
 
-  def formatted_time(t)
-    begin
-      t.strftime(TIME_DISPLAY_STRFTIME)
-    rescue
-      DateTime.parse(t).strftime(TIME_DISPLAY_STRFTIME)
-    end
-  end
 end

@@ -1,5 +1,5 @@
 require 'models/application_record'
-class List < ApplicationRecord
+class List < ApplicationRecord # Treat this as History, since Opal inflection problems broke with 'History', but work with 'List'
 
   belongs_to :valve
 
@@ -7,22 +7,25 @@ class List < ApplicationRecord
   SECONDS_PER_DAY = 24*SECONDS_PER_HOUR
   SECONDS_PER_WEEK = SECONDS_PER_DAY * 7
   PRUNE_INTERVAL = 1 * SECONDS_PER_WEEK 
+  TIME_INPUT_STRFTIME = "%a %d %b %l:%M %P"
 
   # Create an instance of History, using valve_id of the owning Valve as initialization parameter
   def self.start(valve)
-    List.create(start_time: Time.now, start_time_display: Time.now.strftime("%a %d %b %l:%M %P"), stop_time_display: ' ', valve_id: valve.id)
+    List.create(start_time: Time.now, start_time_display: Time.now.strftime(TIME_INPUT_STRFTIME), stop_time_display: ' ', valve_id: valve.id)
   end
 
   # Complete the history
   def stop
-    update(stop_time_display: Time.now.strftime("%a %d %b %l:%M %P"))
+    update(stop_time_display: Time.now.strftime(TIME_INPUT_STRFTIME))
   end
 
   # Delete entries older than Time.now - PRUNE_INTERVAL
   def self.prune
-    List.all.each do |list|
-      if list.start_time < Time.now - PRUNE_INTERVAL
-        list.delete
+    if List.count > 60
+      List.all.each do |list|
+        if list.start_time < Time.now - PRUNE_INTERVAL
+          list.delete
+        end
       end
     end
   end

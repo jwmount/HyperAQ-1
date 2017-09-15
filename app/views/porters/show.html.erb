@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Host name:</strong>
+  <%= @porter.host_name %>
+</p>
+
+<p>
+  <strong>Port number:</strong>
+  <%= @porter.port_number %>
+</p>
+
+<%= link_to 'Edit', edit_porter_path(@porter) %> |
+<%= link_to 'Back', porters_path %>

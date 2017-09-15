@@ -6,8 +6,16 @@ class SprinkleList < Hyperloop::Component
     # any initialization particularly of state variables goes here.
     # this will execute on server (prerendering) and client.
     
-    # @sprinkles = Sprinkle.all
+    @sprinkles = Sprinkle.all
     @next_start_time = Time.now
+    # ReactiveRecord.load do
+    #   # go get whatever data you want
+    #   Sprinkle.each do |row| 
+    #     row.data
+    #   end
+    # end.then do
+    #   try_sort
+    # end
   end
 
   render(DIV) do
@@ -49,6 +57,7 @@ class SprinkleList < Hyperloop::Component
   end
 
   def try_sort
+    # puts 'try_sort'
     # Sort the table if the first element next_start_time has changed
     if @next_start_time != @sprinkles[0].next_start_time
       @sprinkles.sort_by! {|s| s.next_start_time}

@@ -8,7 +8,7 @@ class HistoryList < Hyperloop::Component
     # any initialization particularly of state variables goes here.
     # this will execute on server (prerendering) and client.
     
-    mutate.count = List.length
+    mutate.count = List.count
   end
     
   render(DIV) do

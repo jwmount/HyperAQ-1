@@ -21,7 +21,7 @@ class ManualValveServer < Hyperloop::ServerOp
   #
   # manual valve update behavior
   #
-  # All valve operations are toggles, so if a valve is ON, then a manual activation with turn it OFF.
+  # All valve operations are toggles, so if a valve is ON, then a manual activation will turn it OFF.
   # When turning off a valve manually, locate the active History id and update it when the valve closed.
   def manual_valve_update(id)
     # fetch the valve instance
@@ -48,7 +48,6 @@ class ManualValveServer < Hyperloop::ServerOp
     # Finally fire the actual valve GPIO bit
     valve.save!
     valve.command(valve.cmd)
-    # dispatch_to Hyperloop::Application
   end
 
 end 

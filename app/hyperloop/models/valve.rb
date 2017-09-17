@@ -32,12 +32,13 @@ class Valve < ApplicationRecord
     # 1. If a valve is already ON when the crontab requests arrives, then do nothing.
     def manipulate_and_update(params, valve)
       
-      # log "\nvalve --> #{valve.name}\n"
+      log "\nvalve --> #{valve.name}\n"
 
+      # convert incoming string value of cmd to integer
       cmd = params['cmd'].to_i
-      # log "cmd --> #{cmd}\n"
+      log "cmd --> #{cmd}\n"
       active_sprinkle_id = params['active_sprinkle_id'].to_i
-      # log "active_sprinkle_id --> #{active_sprinkle_id}\n"
+      log "active_sprinkle_id --> #{active_sprinkle_id}\n"
       
       if cmd == ON # start valve sequence
         if valve.cmd == ON 

@@ -26,9 +26,9 @@ class PorterStatus < Hyperloop::Component
   def render
     UL(class: 'navbar-header') do
       LI do
-        A(class: "navbar-brand") do
-          Porter.first.host_with_port 
-        end 
+        BUTTON(class: "btn btn-info navbar-btn") do
+          A(href: '#', data_toggle: "tooltip", title: 'host_with_port') { Porter.first.host_with_port }
+        end
       end
     end
   end

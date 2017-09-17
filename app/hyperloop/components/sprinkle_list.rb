@@ -2,30 +2,19 @@ require 'models/sprinkle'
 
 class SprinkleList < Hyperloop::Component
 
+
   before_mount do
     # any initialization particularly of state variables goes here.
     # this will execute on server (prerendering) and client.
     
-    # @sprinkles = Sprinkle.all
+    @sprinkles = Sprinkle.all
     @next_start_time = Time.now
   end
 
-  # after_mount do
-  #   ReactiveRecord.load do
-  #     # go get whatever data you want
-  #     Sprinkle.each do |row| 
-  #       row.data
-  #     end
-  #   end.then do
-  #     try_sort
-  #   end
-  # end
 
   render(DIV) do
     H4 { "Sprinkles"}
 
-    @sprinkles ||= Sprinkle.all
-    
     TABLE(class: 'table') do
       THEAD do
         TR do

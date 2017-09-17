@@ -63,7 +63,7 @@ ActiveRecord::Schema.define(version: 20170902151006) do
   end
 
   create_table "water_managers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string "state"
+    t.integer "state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

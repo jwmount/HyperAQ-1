@@ -86,8 +86,8 @@ class WaterManagerServer < Hyperloop::ServerOp
 
   def remove_crontab
     system("crontab -r")
-    system("touch lib/tasks/crontab")
-    system("rm lib/tasks/crontab")
+    system("touch lib/assets/crontab")
+    system("rm lib/assets/crontab")
   end
 
   def valve_actuator_path

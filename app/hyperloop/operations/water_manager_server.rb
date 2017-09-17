@@ -3,9 +3,10 @@ class WaterManagerServer < Hyperloop::ServerOp
   param :wm_id #, type: Number
   dispatch_to { Hyperloop::Application }
 
-  ACTIVE =  'Active'
-  STANDBY = 'Standby'
+  ACTIVE =  1
+  STANDBY = 0
 
+  states = %w{ Standby Active }
   OPEN = 1
   CLOSE = 0
 
@@ -17,42 +18,42 @@ class WaterManagerServer < Hyperloop::ServerOp
     water_manager_update(params.wm_id)
   end
 
-  # LOGFILE = "log/crontab.log"
+  LOGFILE = "log/crontab.log"
 
-  # def log(msg)
-  #   f = File.open(LOGFILE, 'a')
-  #   f.write msg
-  #   f.close
-  # end
+  def log(msg)
+    f = File.open(LOGFILE, 'a')
+    f.write msg
+    f.close
+  end
 
   def water_manager_update(id)
     wm = WaterManager.find(id)
     # change state
     wm.update(state: (wm.state == ACTIVE ? STANDBY : ACTIVE))
     wm = WaterManager.find(id)
-    # log "wm.state --> #{wm.state}\n"
+    log "wm.state --> #{states[wm.state]}\n"
     
     if wm.state == ACTIVE
-      # log "wm.arm\n"
+      log "wm.arm\n"
       arm
     else
-      # log "wm.disarm\n"
+      log "wm.disarm\n"
       disarm
     end
   end
 
   def arm
-    # log "Installing crontab\n"
+    log "Installing crontab\n"
     install_crontab
   end
 
   def disarm
-    # log "Removing crontab\n"
+    log "Removing crontab\n"
     remove_crontab
     Valve.all.each do |v|
       # close only those valves that are open.
       if v.cmd == OPEN
-        v.stop
+        v.command(CLOSE)
       end
     end
   end
@@ -77,7 +78,7 @@ class WaterManagerServer < Hyperloop::ServerOp
       [OPEN, CLOSE].each do |action|
         crontab_line =  "#{s.to_crontab(action)} sh #{valve_actuator_path} #{s.valve.to_crontab(action)} #{p} #{s.id}\n" 
         f.write crontab_line
-        # log "#{crontab_line}\n"
+        log "#{crontab_line}\n"
       end
     end
     f.close

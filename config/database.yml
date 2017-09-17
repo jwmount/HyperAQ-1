@@ -51,5 +51,5 @@ test:
 production:
   <<: *default
   database: HyperAQ_production
-  username: HyperAQ
-  password: bugger
+  username: root
+  password: swan2b

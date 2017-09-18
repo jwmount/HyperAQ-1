@@ -4,11 +4,16 @@ require 'models/application_record'
 class Sprinkle < ApplicationRecord
   belongs_to :valve
   validates :time_input, :duration, :valve_id, presence: true
-  
+
+  # you can just specify how the stuff should be sorted in the default scope.
+  # if you for some reason have different sort orders just define different scopes.
+
+  default_scope { order(next_start_time: :asc) }
+
   # crontab format
-  # [Minute]     [hour]       [Day_of_the_Month]  [Month_of_the_Year] [Day_of_the_Week] 
+  # [Minute]     [hour]       [Day_of_the_Month]  [Month_of_the_Year] [Day_of_the_Week]
   # parsed.min   parsed.hour  Time.now.mday       Time.now.mon        compute from(Time.now.wday and parsed value)
-  #                                                                   Time.now.wday <= parsed.wday  
+  #                                                                   Time.now.wday <= parsed.wday
   #                                                                     (parsed.wday - Time.now.wday)* 24 * 60 * 60
 
   #   SU  MO  TU  WE  TH  FR  SA
@@ -32,13 +37,13 @@ class Sprinkle < ApplicationRecord
   OPEN = 1
   CLOSE = 0
 
-  LOGFILE = "log/sprinkle.log"
+  # LOGFILE = "log/sprinkle.log"
 
-  def log(msg)
-    f = File.open(LOGFILE, 'a')
-    f.write msg
-    f.close
-  end
+  # def log(msg)
+  #   f = File.open(LOGFILE, 'a')
+  #   f.write msg
+  #   f.close
+  # end
 
   #
   # business logic methods
@@ -64,7 +69,7 @@ class Sprinkle < ApplicationRecord
       answer += SECONDS_PER_WEEK
       # log "in the past, so add a week --> #{time_as_string(answer)}\n"
     end
-    answer    
+    answer
   end
 
   #answer a string formatted to crontab time standards.  Answer start_time if action is 1 (OPEN),
@@ -73,7 +78,7 @@ class Sprinkle < ApplicationRecord
     # log "Sprinkle.to_crontab(#{action})\n"
     if action == OPEN
       t = start_time
-      # log "start_time --> #{time_as_string(t)}\n"    
+      # log "start_time --> #{time_as_string(t)}\n"
     else
       t = start_time + duration*60
       # log "stop_time --> #{time_as_string(t)}\n"
@@ -86,5 +91,5 @@ class Sprinkle < ApplicationRecord
     # def time_as_string(t)
     #   t.strftime(TIME_INPUT_STRFTIME)
     # end
- 
+
 end

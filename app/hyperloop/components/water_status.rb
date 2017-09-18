@@ -1,8 +1,5 @@
 class WaterStatus < Hyperloop::Component
     
-  # STANDBY = 0
-  # ACTIVE = 1
-
   before_mount do
     # any initialization particularly of state variables goes here.
     # this will execute on server (prerendering) and client.
@@ -26,10 +23,11 @@ class WaterStatus < Hyperloop::Component
   end
 
   def render
+    title = "System is in #{system_state} mode"
     UL(class: 'nav navbar-nav')  do
       LI do
-        BUTTON(class: "btn #{system_button_color} navbar-btn") do 
-          A(href: '#', data: { toggle: "tooltip" }, title: "System is in #{system_state} mode") { system_state }
+        BUTTON(class: "btn #{system_button_color} navbar-btn", data: { toggle: "tooltip" }, title: title) do 
+          system_state
         end.on(:click) { toggle_system_state }
       end
     end

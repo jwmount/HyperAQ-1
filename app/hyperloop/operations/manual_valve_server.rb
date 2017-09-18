@@ -6,10 +6,6 @@ class ManualValveServer < Hyperloop::ServerOp
   ON =  1
   OFF = 0
 
-  step do 
-    manual_valve_update(params.valve_id)
-  end
-
   LOGFILE = "log/manual_valve.log"
 
   def log(msg)
@@ -17,6 +13,11 @@ class ManualValveServer < Hyperloop::ServerOp
     f.write msg
     f.close
   end
+
+  step do 
+    manual_valve_update(params.valve_id)
+  end
+
 
   #
   # manual valve update behavior

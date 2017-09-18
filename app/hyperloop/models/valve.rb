@@ -70,6 +70,9 @@ class Valve < ApplicationRecord
         # log "turn off Valve #{valve.name}\n"
         command(OFF)
         valve.update(active_sprinkle_id: nil, active_history_id: nil, cmd: OFF)
+
+        # Mark the first row in the sprinkle table NEXT
+        Sprinkle.first.update(state: NEXT)
         #
         # Finally, prune any History(List) entries older than the PRUNE_INTERVAL
         #

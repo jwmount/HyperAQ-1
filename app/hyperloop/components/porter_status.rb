@@ -1,12 +1,5 @@
 class PorterStatus < Hyperloop::Component
 
-  before_mount do
-    # any initialization particularly of state variables goes here.
-    # this will execute on server (prerendering) and client.
-    
-    # @tooltip = ToolTip.new( {title: 'cool tooltip', data_toggle: "tooltip", text: Porter.first.host_with_port} )
-  end
-
   after_mount do
     # any client only post rendering initialization goes here.
     # i.e. start timers, HTTP requests, and low level jquery operations etc.
@@ -24,10 +17,11 @@ class PorterStatus < Hyperloop::Component
   end
 
   def render
+    title = 'host:port'
     UL(class: 'navbar-header') do
       LI do
-        BUTTON(class: "btn btn-info navbar-btn") do
-          A(href: '#', data_toggle: "tooltip", title: 'host_with_port') { Porter.first.host_with_port }
+        BUTTON(class: "btn btn-info navbar-btn", data: { toggle: "tooltip", placement: "right" }, title: title) do
+          Porter.first.host_with_port 
         end
       end
     end

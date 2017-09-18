@@ -1,7 +1,7 @@
 require 'models/valve'
 
 class ValveButton < Hyperloop::Component
-  param :valve_id
+  param :valve
 
   before_mount do
     # any initialization particularly of state variables goes here.
@@ -12,25 +12,25 @@ class ValveButton < Hyperloop::Component
   end
 
   def render
-    valve = Valve.find(params.valve_id)
     LI do
-      BUTTON(class: "btn #{state(valve)} navbar-btn") do
-        A(href: '#', data: { toggle: "tooltip" }, title: "Valve #{valve.name } is #{state_name(valve)}") { valve.name }
-      end.on(:click) {command(valve.id)}
+      title = "Valve #{params.valve.name} is #{state}"
+      BUTTON(class: "btn #{color} navbar-btn", data: { toggle: "tooltip" , placement: 'bottom'}, title: title) do
+        params.valve.name 
+      end.on(:click) {command}
     end
   end
 
-  def command(valve_id)
+  def command
     # signal the ServerOp to toggle the valve, and create or update a History (List)
-    ManualValveServer.run(valve_id: valve_id)
+    ManualValveServer.run(valve_id: params.valve.id)
   end
 
-  def state(valve)
-    @colors[valve.cmd]
+  def color
+    @colors[params.valve.cmd]
   end
 
-  def state_name(valve)
-    @states[valve.cmd]
+  def state
+    @states[params.valve.cmd]
   end
 
 end

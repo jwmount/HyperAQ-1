@@ -6,20 +6,19 @@ class WaterStatus < Hyperloop::Component
 
     @states = %w{ Standby Active }
     @colors = %w{ btn-info btn-warning }
-    @singleton = WaterManager.first
   end
 
   def system_state
-    @states[@singleton.state]
+    @states[WaterManager.first.state]
   end
 
   def toggle_system_state
     # call to ServerOp which changes the server state in accordance with the state variable
-    WaterManagerServer.run(wm_id: @singleton.id)
+    WaterManagerServer.run #(wm_id: WaterManager.first.id)
   end
 
   def system_button_color
-    @colors[@singleton.state]
+    @colors[WaterManager.first.state]
   end
 
   def render

@@ -2,8 +2,7 @@ class CreateLists < ActiveRecord::Migration[5.1]
   def change
     create_table :lists do |t|
       t.datetime :start_time
-      t.string :start_time_display
-      t.string :stop_time_display
+      t.datetime :stop_time
       t.integer :valve_id
 
       t.timestamps

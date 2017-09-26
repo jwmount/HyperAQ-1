@@ -27,8 +27,7 @@ ActiveRecord::Schema.define(version: 20170921194656) do
 
   create_table "lists", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.datetime "start_time"
-    t.string "start_time_display"
-    t.string "stop_time_display"
+    t.datetime "stop_time"
     t.integer "valve_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

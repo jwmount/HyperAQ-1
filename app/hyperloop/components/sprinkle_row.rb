@@ -1,5 +1,6 @@
 require 'models/sprinkle'
 require 'models/valve'
+require 'time'
 
 class SprinkleRow < Hyperloop::Component
   param :sprinkle

@@ -23,7 +23,7 @@ class List < ApplicationRecord # Treat this as History, since Opal inflection pr
   def start(valve_id)
     valve = Valve.find(valve_id)
     log "\nhistory.start, #{valve.name}\n"
-    update(start_time: Time.now, start_time_display: Time.now.strftime(TIME_INPUT_STRFTIME), stop_time_display: ' ', valve_id: valve_id)
+    update(start_time: Time.now, valve_id: valve_id)
     valve.update(active_history_id: id)
   end
 
@@ -32,7 +32,7 @@ class List < ApplicationRecord # Treat this as History, since Opal inflection pr
     # log "history.stop, valve_id --> #{valve_id}\n"
     valve = Valve.find(valve_id)
     log "history.stop, #{valve.name}\n"
-    update(stop_time_display: Time.now.strftime(TIME_INPUT_STRFTIME))
+    update(stop_time: Time.now)
     valve.update(active_history_id: 0)
   end
 

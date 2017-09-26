@@ -4,7 +4,7 @@
 # individually if it is necessary to modify a model's attributes
 #
 bundle install
-rails g model List start_time:datetime start_time_display:string stop_time_display:string valve_id:integer --force
+rails g model List start_time:datetime stop_time:datetime valve_id:integer --force
 rails g scaffold Sprinkle start_time:datetime duration:integer time_input:string valve_id:integer \
   state:integet key:string --force
 rails g model Valve name:string gpio_pin:integer active_history_id:integer cmd:integer --force

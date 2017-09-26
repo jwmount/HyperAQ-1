@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170902151006) do
+ActiveRecord::Schema.define(version: 20170921194656) do
 
   create_table "hyperloop_connections", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "channel"
@@ -41,13 +41,21 @@ ActiveRecord::Schema.define(version: 20170902151006) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "sprinkle_agents", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer "sprinkle_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "sprinkles", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.datetime "next_start_time"
-    t.string "next_start_time_display"
-    t.integer "state"
+    t.datetime "start_time"
+    t.string "start_time_display"
     t.string "time_input"
     t.integer "duration"
     t.integer "valve_id"
+    t.integer "key"
+    t.integer "state"
+    t.integer "sprinkle_agent_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -55,8 +63,8 @@ ActiveRecord::Schema.define(version: 20170902151006) do
   create_table "valves", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
     t.integer "gpio_pin"
-    t.integer "active_sprinkle_id"
     t.integer "active_history_id"
+    t.integer "active_sprinkle_id"
     t.integer "cmd"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

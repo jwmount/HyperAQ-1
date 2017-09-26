@@ -8,7 +8,7 @@ class SprinkleList < Hyperloop::Component
     TABLE(class: 'table') do
       THEAD do
         TR do
-          TH { " Next Start Time " }          
+          TH { " Start Time " }          
           TH { " Time input " }
           TH { " Duration" }
           TH { " Valve " }

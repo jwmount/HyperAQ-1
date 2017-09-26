@@ -1,36 +1,44 @@
 require 'models/application_record'
 class List < ApplicationRecord # Treat this as History, since Opal inflection problems broke with 'History', but work with 'List'
 
-  # you can just specify how the stuff should be sorted in the default scope.
-  # if you for some reason have different sort orders just define different scopes.
-
   default_scope { order(start_time: :desc) }
   belongs_to :valve
+
+
+  LOGFILE = "log/history.log"
+
+  def log(msg)
+    f = File.open(LOGFILE, 'a')
+    f.write msg
+    f.close
+  end
 
   SECONDS_PER_HOUR = 60*60
   SECONDS_PER_DAY = 24*SECONDS_PER_HOUR
   SECONDS_PER_WEEK = SECONDS_PER_DAY * 7
-  PRUNE_INTERVAL = 1 * SECONDS_PER_WEEK 
+  PRUNE_INTERVAL = SECONDS_PER_WEEK 
   TIME_INPUT_STRFTIME = "%a %d %b %l:%M %P"
 
-  # Create an instance of History, using valve_id of the owning Valve as initialization parameter
-  def self.start(valve)
-    List.create(start_time: Time.now, start_time_display: Time.now.strftime(TIME_INPUT_STRFTIME), stop_time_display: ' ', valve_id: valve.id)
+  # Create an instance of History, using valve_id of the owning valve_id as initialization parameter
+  def start(valve_id)
+    valve = Valve.find(valve_id)
+    log "\nhistory.start, #{valve.name}\n"
+    update(start_time: Time.now, start_time_display: Time.now.strftime(TIME_INPUT_STRFTIME), stop_time_display: ' ', valve_id: valve_id)
+    valve.update(active_history_id: id)
   end
 
   # Complete the history
   def stop
+    # log "history.stop, valve_id --> #{valve_id}\n"
+    valve = Valve.find(valve_id)
+    log "history.stop, #{valve.name}\n"
     update(stop_time_display: Time.now.strftime(TIME_INPUT_STRFTIME))
+    valve.update(active_history_id: 0)
   end
 
   # Delete entries older than Time.now - PRUNE_INTERVAL
   def self.prune
-    if List.count > 60
-      List.all.each do |list|
-        if list.start_time < Time.now - PRUNE_INTERVAL
-          list.delete
-        end
-      end
-    end
+    List.where((Time.now - start_time) > PRUNE_INTERVAL).destroy_all
   end
+
 end

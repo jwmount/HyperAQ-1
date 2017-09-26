@@ -14,7 +14,7 @@ class ValveButton < Hyperloop::Component
   def render
     LI do
       title = "Valve #{params.valve.name} is #{state}"
-      BUTTON(class: "btn #{color} navbar-btn", data: { toggle: "tooltip" , placement: 'bottom'}, title: title) do
+      BUTTON(class: "btn #{color} navbar-btn", data: { toggle: "tooltip" , placement: 'bottom' }, title: title) do
         params.valve.name 
       end.on(:click) {command}
     end

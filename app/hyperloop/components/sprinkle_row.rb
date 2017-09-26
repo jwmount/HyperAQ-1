@@ -3,10 +3,15 @@ require 'models/valve'
 
 class SprinkleRow < Hyperloop::Component
   param :sprinkle
+    
+  # Sprinkle states
+  IDLE = 0
+  ACTIVE = 1
+  NEXT = 2
 
   render do
     TR(class: markup) do
-      TD { params.sprinkle.next_start_time_display }
+      TD { params.sprinkle.start_time_display }
     
       TD { params.sprinkle.time_input }    
     
@@ -18,7 +23,8 @@ class SprinkleRow < Hyperloop::Component
 
   # change color as sprinkle state changes
   def markup
-    %w{default danger info}[params.sprinkle.state]
+    #   IDLE    ACTIVE NEXT
+    %w{ default info   danger }[params.sprinkle.state]
   end
 
 end

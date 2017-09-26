@@ -5,10 +5,12 @@
 #
 bundle install
 rails g model List start_time:datetime start_time_display:string stop_time_display:string valve_id:integer --force
-rails g model Sprinkle next_start_time_display:string next_start_time:datetime state:integer time_input:string duration:integer valve_id:integer state:string --force
-rails g scaffold Valve name:string gpio_pin:integer active_sprinkle_id:integer active_history_id:integer cmd:integer  --force
-rails g model WaterManager state:string --force
+rails g scaffold Sprinkle start_time:datetime start_time_display:string duration:integer time_input:string valve_id:integer \
+  state:integet key:string --force
+rails g model Valve name:string gpio_pin:integer active_history_id:integer cmd:integer --force
+rails g scaffold WaterManager state:string --force
 rails g scaffold Porter host_name:string port_number:string --force
+rails g scaffold SprinkleAgent sprinkle_id:integer 
 
 sh dev-bounce-db.sh
 rails g hyperloop:install

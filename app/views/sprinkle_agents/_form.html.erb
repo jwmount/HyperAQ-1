@@ -1,0 +1,22 @@
+<%= form_with(model: sprinkle_agent, local: true) do |form| %>
+  <% if sprinkle_agent.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(sprinkle_agent.errors.count, "error") %> prohibited this sprinkle_agent from being saved:</h2>
+
+      <ul>
+      <% sprinkle_agent.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :sprinkle_id %>
+    <%= form.number_field :sprinkle_id, id: :sprinkle_agent_sprinkle_id %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

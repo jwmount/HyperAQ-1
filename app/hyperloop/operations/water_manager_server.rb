@@ -3,20 +3,24 @@ class WaterManagerServer < Hyperloop::ServerOp
   param :wm_id #, type: Number
   dispatch_to { Hyperloop::Application }
 
-  # Sprinkle states
-  IDLE = 0
-  NEXT = 1
-  ACTIVE = 2
+  step do 
+    water_manager_update(params.wm_id)
+  end
 
   # System Watering states
-  ACTIVE =  1
-  STANDBY = 0
+  WM_ACTIVE =  1
+  WM_STANDBY = 0
 
   states = %w{ Standby Active }
 
   # Valve command values
-  OPEN = 1
-  CLOSE = 0
+  OFF = 0
+  ON = 1
+  
+  # Sprinkle states
+  IDLE = 0
+  ACTIVE = 1
+  NEXT = 2
 
   CRONTAB = 'lib/assets/crontab'
 
@@ -30,17 +34,13 @@ class WaterManagerServer < Hyperloop::ServerOp
     f.close
   end
 
-  step do 
-    water_manager_update(params.wm_id)
-  end
-
   def water_manager_update(id)
     log "WaterManagerServer.water_manager_update(#{id})\n"
-    wm = WaterManager.first
-    # change state
-    wm.update(state: (wm.state == ACTIVE ? STANDBY : ACTIVE))
+    wm = WaterManager.find(id)
+    # toggle state
+    wm.update(state: (wm.state == WM_ACTIVE ? WM_STANDBY : WM_ACTIVE))
     
-    if wm.state == ACTIVE
+    if wm.state == WM_ACTIVE
       log "wm.arm\n"
       arm
     else
@@ -50,7 +50,7 @@ class WaterManagerServer < Hyperloop::ServerOp
   end
 
   def arm
-    # log "Installing crontab\n"
+    log "Installing crontab\n"
     install_crontab
   end
 
@@ -59,33 +59,30 @@ class WaterManagerServer < Hyperloop::ServerOp
     remove_crontab
     Valve.all.each do |v|
       # close only those valves that are open.
-      if v.cmd == OPEN
-        v.command(CLOSE)
+      if v.cmd == ON
+        v.command(OFF)
       end
     end
   end
 
-  # minute (0-59), hour (0-23, 0 = midnight), day (1-31), month (1-12), weekday (0-6, 0 = Sunday), command(valve_id, on/off, host:port, sprinkle)
-  # 03 19 * * 2 sh /home/kenb/development/Aquarius/lib/tasks/valve_actuator.sh  v_id cmd hp s_id
-
-  # where
-
-  # VALVE_ID=$1,    v_id
-  # CMD=$2,         cmd
-  # HTTP_HOST=$3    localhost:nnnn
-  # SPRINKLE_ID=$4  s_id
+  # HTTP_HOST=$3          localhost:nnnn
+  # SPRINKLE_ID=$1        s.id
+  # STATE=$2,             s.state
+  # KEY=$4                s.key
+  # SPRINKLE_AGENT_ID=$5  sa.id
   def install_crontab
     # create a working crontab file
-    log "Building crontab\n"
+    # log "Building crontab\n"
     f = File.open(CRONTAB, 'w')
     f.write "MAIL='keburgett@gmail.com'\n"
-    # for each sprinkle, write a crontab entry for OPEN and CLOSE times.
+    # for each sprinkle, write a crontab entry for ON and OFF times.
     p = Porter.first.localhost_with_port # provides host:port combination
+    sprinkle_agent_id = 99 # fUture update to use daemon, for now just a placeholder
     Sprinkle.all.each do |s|
-      [OPEN, CLOSE].each do |action|
-        crontab_line =  "#{s.to_crontab(action)} sh #{valve_actuator_path} #{s.valve.to_crontab(action)} #{p} #{s.id}\n" 
+      [ACTIVE, IDLE].each do |state| # Note that valve states and sprinkles states SHARE the same numeric values
+        crontab_line =  "#{s.to_crontab_time(state)} sh #{s.actuator_path} #{p} #{s.to_crontab_attributes(state)} #{sprinkle_agent_id}\n" 
         f.write crontab_line
-        # log "#{crontab_line}\n"
+        log "#{crontab_line}\n"
       end
     end
     f.close
@@ -100,10 +97,6 @@ class WaterManagerServer < Hyperloop::ServerOp
     system("crontab -r")
     system("touch lib/assets/crontab")
     system("rm lib/assets/crontab")
-  end
-
-  def valve_actuator_path
-    File.realdirpath('lib/tasks/valve_actuator.sh')
   end
 
 end 

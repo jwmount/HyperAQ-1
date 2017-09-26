@@ -9,9 +9,11 @@ class SprinkleRow < Hyperloop::Component
   ACTIVE = 1
   NEXT = 2
 
+  SPRINKLE_TIME_FORMAT = "%a %d %b %l:%M %P"
+
   render do
     TR(class: markup) do
-      TD { params.sprinkle.start_time_display }
+      TD { params.sprinkle.start_time.strftime(SPRINKLE_TIME_FORMAT) }
     
       TD { params.sprinkle.time_input }    
     

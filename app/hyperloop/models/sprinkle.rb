@@ -99,7 +99,7 @@ class Sprinkle < ApplicationRecord
       else # stop valve sequence
         update(state: IDLE)
         valve.stop
-        update_start_time
+        update(start_time: next_start_time)
         # Mark the first row in the sprinkle table NEXT
         Sprinkle.first.update(state: NEXT)
         # Finally, prune any History(List) entries older than the PRUNE_INTERVAL
@@ -133,11 +133,6 @@ class Sprinkle < ApplicationRecord
 
     def update_start_time
       # roll the start_time to the next week
-      current = start_time
-      start_time = next_start_time
-      start_time_display = time_as_string(start_time)
-      update(start_time: next_start_time, start_time_display: time_as_string(next_start_time))
-      log "sprinkle.update_start_time, current --> #{time_as_string(current)}, new --> #{start_time_display}\n"
     end
 
     private

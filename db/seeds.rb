@@ -44,30 +44,25 @@ tomato = Valve.create(name: 'Tomato', gpio_pin: 18, cmd: OFF, active_sprinkle_id
 
 # production sprinkle set; keep updated as watering needs evolve.
 # ****************************** uncomment below for production sprinkle set ****************
-hour = 7
-%w{ Sun Mon Tue Wed Thu Fri Sat }.each do |day|
-  %w{am pm}.each do |meridian|
-    s = Sprinkle.create( time_input: "#{day} #{hour}:00 #{meridian}" , duration:  3, valve_id: atrium.id, state: IDLE, key: Random.rand(RANDOM).to_s) #unless meridian == 12
-    st = s.next_start_time
-    s.update(start_time: st, start_time_display: st.strftime(TIME_INPUT_STRFTIME))
+# hour = 7
+# %w{ Sun Mon Tue Wed Thu Fri Sat }.each do |day|
+#   %w{am pm}.each do |meridian|
+#     s = Sprinkle.create( time_input: "#{day} #{hour}:00 #{meridian}" , duration:  3, valve_id: atrium.id, state: IDLE, key: Random.rand(RANDOM).to_s) #unless meridian == 12
+#     s.update(start_time: s.next_start_time)
 
-    s = Sprinkle.create( time_input: "#{day} #{hour}:05 #{meridian}" , duration:  3, valve_id: back.id, state: IDLE, key: Random.rand(RANDOM).to_s)
-    st = s.next_start_time
-    s.update(start_time: st, start_time_display: st.strftime(TIME_INPUT_STRFTIME))
+#     s = Sprinkle.create( time_input: "#{day} #{hour}:05 #{meridian}" , duration:  3, valve_id: back.id, state: IDLE, key: Random.rand(RANDOM).to_s)
+#     s.update(start_time: s.next_start_time)
 
-    s = Sprinkle.create( time_input: "#{day} #{hour}:10 #{meridian}" , duration:  3, valve_id: deck.id, state: IDLE, key: Random.rand(RANDOM).to_s) unless meridian == 12
-    st = s.next_start_time
-    s.update(start_time: st, start_time_display: st.strftime(TIME_INPUT_STRFTIME)) unless meridian == 12
+#     s = Sprinkle.create( time_input: "#{day} #{hour}:10 #{meridian}" , duration:  3, valve_id: deck.id, state: IDLE, key: Random.rand(RANDOM).to_s) unless meridian == 12
+#     s.update(start_time: s.next_start_time)
 
-    s = Sprinkle.create( time_input: "#{day} #{hour}:15 #{meridian}" , duration:  3, valve_id: front.id, state: IDLE, key: Random.rand(RANDOM).to_s) #unless meridian == 12
-    st = s.next_start_time
-    s.update(start_time: st, start_time_display: st.strftime(TIME_INPUT_STRFTIME))
+#     s = Sprinkle.create( time_input: "#{day} #{hour}:15 #{meridian}" , duration:  3, valve_id: front.id, state: IDLE, key: Random.rand(RANDOM).to_s) #unless meridian == 12
+#     s.update(start_time: .next_start_time)
 
-    s = Sprinkle.create( time_input: "#{day} #{hour}:20 #{meridian}" , duration:  5, valve_id: tomato.id, state: IDLE, key: Random.rand(RANDOM).to_s)
-    st = s.next_start_time
-    s.update(start_time: st, start_time_display: st.strftime(TIME_INPUT_STRFTIME))
-  end
-end
+#     s = Sprinkle.create( time_input: "#{day} #{hour}:20 #{meridian}" , duration:  5, valve_id: tomato.id, state: IDLE, key: Random.rand(RANDOM).to_s)
+#     s.update(start_time: st.next_start_time)
+#   end
+# end
 # ****************************** uncomment above for production sprinkle set ****************
 
 
@@ -79,15 +74,14 @@ end
 # testing sprinkle set; quick test of all 5 valves in 20 minutes
 # Sprinkle.create( time_input: seed_time(ix) , duration: 1, valve_id: 1 )
 # ****************************** uncomment below for test sprinkle set ****************
-# ix = 2 # start first sprinkle 2 minutes from now.
-# 2.times.each do
-#   Valve.all.each do |valve|
-#     s = Sprinkle.create( time_input: seed_time(ix) , duration: 1, valve_id: valve.id, state: IDLE, key: Random.rand(RANDOM).to_s )
-#     st = s.next_start_time
-#     s.update( start_time: st, start_time_display: st.strftime(TIME_INPUT_STRFTIME) )
-#     ix += 2
-#   end
-# end
+ix = 2 # start first sprinkle 2 minutes from now.
+2.times.each do
+  Valve.all.each do |valve|
+    s = Sprinkle.create( time_input: seed_time(ix) , duration: 1, valve_id: valve.id, state: IDLE, key: Random.rand(RANDOM).to_s )
+    s.update( start_time: s.next_start_time )
+    ix += 2
+  end
+end
 # ****************************** uncomment above for test sprinkle set ****************
 
 

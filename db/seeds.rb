@@ -36,11 +36,11 @@ Porter.create(host_name: 'did-not-work', port_number: 9999)
 # front  = Valve.create(name: 'Front',  gpio_pin:16, cmd:0, bb_pin: 18, cpu2bb_color: 'white-brown', relay_module: 1, relay_index: 3)
 # tomato = Valve.create(name: 'Tomato', gpio_pin:18, cmd:0, bb_pin: 16, cpu2bb_color: 'orange',      relay_module: 1, relay_index: 2)
 
-atrium = Valve.create(name: 'Atrium', gpio_pin:  7, cmd: OFF, active_sprinkle_id: 0, active_history_id: 0)
-back   = Valve.create(name: 'Back',   gpio_pin: 22, cmd: OFF, active_sprinkle_id: 0, active_history_id: 0)
-deck   = Valve.create(name: 'Deck',   gpio_pin: 12, cmd: OFF, active_sprinkle_id: 0, active_history_id: 0)
-front  = Valve.create(name: 'Front',  gpio_pin: 16, cmd: OFF, active_sprinkle_id: 0, active_history_id: 0)
-tomato = Valve.create(name: 'Tomato', gpio_pin: 18, cmd: OFF, active_sprinkle_id: 0, active_history_id: 0)
+atrium = Valve.create(name: 'Atrium', gpio_pin:  7, cmd: OFF, active_history_id: 0)
+back   = Valve.create(name: 'Back',   gpio_pin: 22, cmd: OFF, active_history_id: 0)
+deck   = Valve.create(name: 'Deck',   gpio_pin: 12, cmd: OFF, active_history_id: 0)
+front  = Valve.create(name: 'Front',  gpio_pin: 16, cmd: OFF, active_history_id: 0)
+tomato = Valve.create(name: 'Tomato', gpio_pin: 18, cmd: OFF, active_history_id: 0)
 
 # production sprinkle set; keep updated as watering needs evolve.
 # ****************************** uncomment below for production sprinkle set ****************

@@ -4,7 +4,6 @@ class CreateValves < ActiveRecord::Migration[5.1]
       t.string :name
       t.integer :gpio_pin
       t.integer :active_history_id
-      t.integer :active_sprinkle_id
       t.integer :cmd
 
       t.timestamps

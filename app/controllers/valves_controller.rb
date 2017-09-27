@@ -33,6 +33,6 @@ class ValvesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def valve_params
-      params.require(:valve).permit(:name, :gpio_pin, :active_sprinkle_id, :active_history_id, :cmd)
+      params.require(:valve).permit(:name, :gpio_pin, :active_history_id, :cmd)
     end
 end

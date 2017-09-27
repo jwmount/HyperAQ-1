@@ -62,7 +62,6 @@ ActiveRecord::Schema.define(version: 20170921194656) do
     t.string "name"
     t.integer "gpio_pin"
     t.integer "active_history_id"
-    t.integer "active_sprinkle_id"
     t.integer "cmd"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

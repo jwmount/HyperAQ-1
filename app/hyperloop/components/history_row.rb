@@ -1,16 +1,15 @@
 require 'models/list'
 require 'models/valve'
-require 'time'
 
 class HistoryRow < Hyperloop::Component
   param :list
     
-  HISTORY_TIME_FORMAT = "%a %d %b %l:%M %P"    
+  HISTORY_TIME_FORMAT = "%a %d %b %l:%M:%S %P"    
 
   render do
     TR(class: markup) do
       
-      TD { params.list.start_time.strftime("%a %d %b %l:%M %P") }
+      TD { params.list.start_time.strftime(HISTORY_TIME_FORMAT) }
 
       TD { stop_time_display }
 
@@ -24,8 +23,9 @@ class HistoryRow < Hyperloop::Component
     params.list.stop_time.nil? ? 'warning' : 'default'
   end
 
+  # handle nil case
   def stop_time_display
-    params.list.stop_time.nil? ? ' ' : params.list.stop_time.strftime("%a %d %b %l:%M %P")
+    params.list.stop_time.nil? ? ' ' : params.list.stop_time.strftime(HISTORY_TIME_FORMAT)
   end
   
 end

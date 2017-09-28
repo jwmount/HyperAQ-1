@@ -4,7 +4,6 @@ class List < ApplicationRecord # Treat this as History, since Opal inflection pr
   default_scope { order(start_time: :desc) }
   belongs_to :valve
 
-
   LOGFILE = "log/history.log"
 
   def log(msg)
@@ -29,7 +28,7 @@ class List < ApplicationRecord # Treat this as History, since Opal inflection pr
 
   # Complete the history
   def stop
-    # log "history.stop, valve_id --> #{valve_id}\n"
+    log "history.stop, valve_id --> #{valve_id}\n"
     valve = Valve.find(valve_id)
     log "history.stop, #{valve.name}\n"
     update(stop_time: Time.now)

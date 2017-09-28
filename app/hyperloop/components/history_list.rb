@@ -1,6 +1,5 @@
 require 'models/list'
 require 'models/valve'
-require 'time'
 
 class HistoryList < Hyperloop::Component
     

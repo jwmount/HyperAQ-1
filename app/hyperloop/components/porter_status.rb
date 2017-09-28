@@ -1,10 +1,7 @@
 class PorterStatus < Hyperloop::Component
 
   after_mount do
-    # any client only post rendering initialization goes here.
-    # i.e. start timers, HTTP requests, and low level jquery operations etc.
-
-    # This request will cause the 'show' method of the PortersController to 
+    # This request will cause the 'get' method of the PortersController to 
     # access the request.port out of the http request and stash it into Porter.first.port_number.
     # That same method will grab the `hostname` from the underlying OS and stash it
     # into Porter.first.host_name

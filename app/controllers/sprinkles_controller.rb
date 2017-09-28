@@ -8,7 +8,6 @@ class SprinklesController < ApplicationController
   # PATCH/PUT /sprinkles/1.json
   def update
     respond_to do |format|
-      # replace this method with the original, and implement an update method in the Sprinkle class
       if @sprinkle.manipulate_and_update(sprinkle_params)
         format.json { render :show, status: :ok, location: @sprinkle }
       else
@@ -25,7 +24,7 @@ class SprinklesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def sprinkle_params
-      params.require(:sprinkle).permit(:state, :key, :sprinkle_agent_id)
+      params.require(:sprinkle).permit(:state)
     end
 
 end

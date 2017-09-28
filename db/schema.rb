@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170921194656) do
+ActiveRecord::Schema.define(version: 20170902151006) do
 
   create_table "hyperloop_connections", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "channel"
@@ -33,15 +33,15 @@ ActiveRecord::Schema.define(version: 20170921194656) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "porters", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string "host_name"
-    t.string "port_number"
+  create_table "minute_hands", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "sprinkle_agents", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "sprinkle_id"
+  create_table "porters", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "host_name"
+    t.string "port_number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -51,9 +51,7 @@ ActiveRecord::Schema.define(version: 20170921194656) do
     t.string "time_input"
     t.integer "duration"
     t.integer "valve_id"
-    t.integer "key"
     t.integer "state"
-    t.integer "sprinkle_agent_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -69,6 +67,8 @@ ActiveRecord::Schema.define(version: 20170921194656) do
 
   create_table "water_managers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "state"
+    t.integer "key"
+    t.integer "scheduling_option"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

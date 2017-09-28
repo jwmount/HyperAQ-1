@@ -5,9 +5,7 @@ class CreateSprinkles < ActiveRecord::Migration[5.1]
       t.string   :time_input
       t.integer  :duration
       t.integer  :valve_id
-      t.integer  :key
       t.integer  :state
-      t.integer  :sprinkle_agent_id
 
       t.timestamps
     end

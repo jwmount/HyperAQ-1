@@ -44,20 +44,20 @@ class Sprinkle < ApplicationRecord
     NEXT = 2
 
     
+    
+    # LOGFILE = "log/sprinkle.log"
+    # LOG_TIME = "%H:%M:%S "
 
-    LOGFILE = "log/sprinkle.log"
-    LOG_TIME = "%H:%M:%S "
+    # def log_time
+    #   Time.now.strftime(LOG_TIME)
+    # end
 
-    def log_time
-      Time.now.strftime(LOG_TIME)
-    end
-
-    def log(msg)
-      f = File.open(LOGFILE, 'a')
-      f.write msg
-      # f.write "#{log_time} #{msg}"
-      f.close
-    end
+    # def log(msg)
+    #   f = File.open(LOGFILE, 'a')
+    #   f.write msg
+    #   f.write "#{log_time} #{msg}"
+    #   f.close
+    # end
 
     #
     # business logic methods
@@ -79,33 +79,45 @@ class Sprinkle < ApplicationRecord
       answer
     end
 
+    def stop_time
+      start_time + duration * 60
+    end
+
     def manipulate_and_update(params)
-      states = %w{ IDLE ACTIVE NEXT }
-      log "\nsprinkle.manipulate_and_update(params), sprinkle.id --> #{id}\n"
-      log "sprinkle.state (old) --> #{state} #{states[state]}\n"
+      # Parameters: {"state"=>"0", "id"=>"9", "sprinkle"=>{"state"=>"0"}}
       new_state = params['state'].to_i
-      log "sprinkle.state (new) --> #{new_state}, #{states[new_state]}\n"
-      key = params['key'].to_i
-      log "sprinkle.key --> #{key}\n"
-      sprinkle_agent_id = params['sprinkle_agent_id'].to_i
-      log "sprinkle.sprinkle_agent_id --> #{sprinkle_agent_id}\n"
-      log "sprinkle.valve.name --> #{valve.name}\n"
+      
+      # log "sprinkle.manipulate_and_update(params)\n"
+      # log "new_state --> #{states(new_state)}\n"
+      # log "id --> #{id}\n"
+      # log "sprinkle.state (old) --> #{states(state)}\n"
+      # log "sprinkle.state (new) --> #{states(new_state)}\n"
 
       if new_state == ACTIVE # start valve sequence
-        update(state: ACTIVE)
-        if valve.cmd != ON
-          valve.start
-        end
+        start
       else # stop valve sequence
-        update(state: IDLE)
-        valve.stop
-        update(start_time: next_start_time)
-        # Mark the first row in the sprinkle table NEXT
-        Sprinkle.first.update(state: NEXT)
-        # Finally, prune any History(List) entries older than the PRUNE_INTERVAL
-        # List.prune
+        stop      
       end   
       true # must return true
+    end
+
+    def start
+      update(state: ACTIVE)
+      # log "sprinkle.start #{valve.name}, #{state} #{states(state)}\n"
+      if valve.cmd != ON
+        valve.start
+      end
+    end
+
+    def stop
+      update(state: IDLE)
+      # log "sprinkle.stop #{valve.name}, #{state} #{states(state)}\n"
+      valve.stop
+      update(start_time: next_start_time)
+      # Mark the first row in the sprinkle table NEXT
+      Sprinkle.first.update(state: NEXT)
+      # Finally, prune any History(List) entries older than the PRUNE_INTERVAL
+      # List.prune      
     end
 
     #answer a string formatted to crontab time standards.  Answer start_time if state is 1 (ACTIVE),
@@ -116,7 +128,7 @@ class Sprinkle < ApplicationRecord
         t = start_time
         # log "start_time --> #{t}, #{t.strftime(CRONTAB_STRFTIME)}\n"
       else
-        t = start_time + duration*60
+        t = stop_time
         # log "stop_time --> #{t}, #{t.strftime(CRONTAB_STRFTIME)}\n"
       end
       t.strftime(CRONTAB_STRFTIME)
@@ -124,18 +136,17 @@ class Sprinkle < ApplicationRecord
 
     # answer a set of attributes as a string containing the 3 attributes in order
     def to_crontab_attributes(state)
-      "#{id} #{state} #{key}"
+      "#{id} #{state}"
     end
 
     def actuator_path
       File.realdirpath('lib/tasks/sprinkle_actuator.sh')
     end
 
-    def update_start_time
-      # roll the start_time to the next week
-    end
-
     private
+      def states(index)
+        %w{ IDLE ACTIVE NEXT }[index]
+      end
 
       def time_as_string(t)
         t.strftime(TIME_INPUT_STRFTIME)

@@ -8,16 +8,18 @@ class WaterStatus < Hyperloop::Component
     @colors = %w{ btn-info btn-warning }
   end
 
+  # defines color of button for each state (0/1)
   def color
     @colors[WaterManager.first.state]
   end
 
+  # defines the state text for each state (0/1)
   def state
     @states[WaterManager.first.state]
   end
 
+   # call to ServerOp (WaterManagerServer) which changes the server state in accordance with the state variable
   def toggle_state
-    # call to ServerOp which changes the server state in accordance with the state variable
     WaterManagerServer.run(wm_id: WaterManager.first.id)
   end
 

@@ -10,8 +10,7 @@ class Valve < ApplicationRecord
     # Valve cmds
     OFF = 0
     ON = 1
-    commands = %w{ OFF ON }
-
+   
     LOGFILE = "log/valve.log"
 
     def log(msg)
@@ -20,35 +19,36 @@ class Valve < ApplicationRecord
       f.close
     end
 
-    # send command(s) to Raspberry PI GPIO pins (using WiringPI global shell command, gpio)
-    def command(val)
-      # record the valve's command state in the db
-      update(cmd: val)
-      mode = "gpio -g mode #{gpio_pin} out"
-      write = "gpio -g write #{gpio_pin} #{val}"
-      system(mode)
-      system(write)
-    end
-
-    # # answer a set of parameters needed by the actuator script
-    # def to_crontab(sprinkle, state)
-    #   "%2d %2d" % [sprinkle.id, state] 
-    # end
-
     def start
       command(ON) 
-      log "\nValve #{id}, #{name} start, cmd --> #{cmd}\n"
+      log "\n#{name} start, cmd --> #{commands(cmd)}\n"
       # start a new history
       List.new.start(id)
     end
 
     def stop
       command(OFF) 
-      log "Valve #{id}, #{name} stop,  cmd --> #{cmd}\n"
+      log "#{name} stop,  cmd --> #{commands(cmd)}\n"
       # complete the history 
       history = List.find(active_history_id)
       history.stop
     end
+
+    private
+
+      def commands(index)
+        %w{ OFF ON }[index]
+      end
+
+      # send command(s) to Raspberry PI GPIO pins (using WiringPI global shell command, gpio)
+      def command(val)
+        # record the valve's command state in the db
+        update(cmd: val)
+        mode = "gpio -g mode #{gpio_pin} out"
+        write = "gpio -g write #{gpio_pin} #{val}"
+        system(mode)
+        system(write)
+      end
 
   end # RUBY_ENGINE
 end

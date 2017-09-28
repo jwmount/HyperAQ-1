@@ -4,9 +4,6 @@ class ValveButton < Hyperloop::Component
   param :valve
 
   before_mount do
-    # any initialization particularly of state variables goes here.
-    # this will execute on server (prerendering) and client.
-
     @states = %w{ OFF ON }
     @colors = %w{ btn-primary btn-success }
   end
@@ -20,17 +17,19 @@ class ValveButton < Hyperloop::Component
     end
   end
 
+  # signal the ServerOp(ManualValveServer) to toggle the valve, and create or update a History (List)
   def command
-    # signal the ServerOp to toggle the valve, and create or update a History (List)
     ManualValveServer.run(valve_id: params.valve.id)
   end
 
+  # defines background color the button in OFF/ON states
   def color
     @colors[params.valve.cmd]
   end
 
+  # defines text state for tooltip title
   def state
     @states[params.valve.cmd]
   end
 
-end
+end 

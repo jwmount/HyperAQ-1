@@ -16,18 +16,18 @@ WM_ACTIVE = 1
 
 # Scheduling options
 CRONTAB_SPRINKLE_ALL  = 0
-CRONTAB_SPRINKLE_EACH = 1
-DAEMON_SPRINKLE_EACH  = 2
+DAEMON_MINUTE_HAND  = 1
+
 
 RANDOM = 32769
 
 TIME_INPUT_STRFTIME = "%a %d %b %l:%M %P"
 
 # create the top-level WaterManager.singleton
-WaterManager.create(state: WM_STANDBY, key: Random.rand(RANDOM), scheduling_option: CRONTAB_SPRINKLE_ALL)
+WaterManager.create(state: WM_STANDBY, key: Random.rand(RANDOM), scheduling_option: DAEMON_MINUTE_HAND)
 #
 # create a dummy MinuteHand record
-MinuteHand.create(state: IDLE)
+MinuteHand.create(key: nil)
 #
 # create the Porter singleton, with dummy data
 #
@@ -41,11 +41,11 @@ Porter.create(host_name: 'not-yet-loaded', port_number: 9999)
 # front  = Valve.create(name: 'Front',  gpio_pin:16, cmd:0, bb_pin: 18, cpu2bb_color: 'white-brown', relay_module: 1, relay_index: 3)
 # tomato = Valve.create(name: 'Tomato', gpio_pin:18, cmd:0, bb_pin: 16, cpu2bb_color: 'orange',      relay_module: 1, relay_index: 2)
 
-atrium = Valve.create(name: 'Atrium', gpio_pin:  7, cmd: OFF, active_history_id: 0)
-back   = Valve.create(name: 'Back',   gpio_pin: 22, cmd: OFF, active_history_id: 0)
-deck   = Valve.create(name: 'Deck',   gpio_pin: 12, cmd: OFF, active_history_id: 0)
-front  = Valve.create(name: 'Front',  gpio_pin: 16, cmd: OFF, active_history_id: 0)
-tomato = Valve.create(name: 'Tomato', gpio_pin: 18, cmd: OFF, active_history_id: 0)
+atrium = Valve.create(name: 'Atrium', gpio_pin:  7, cmd: OFF, active_history_id: 0, mode_set: 0)
+back   = Valve.create(name: 'Back',   gpio_pin: 22, cmd: OFF, active_history_id: 0, mode_set: 0)
+deck   = Valve.create(name: 'Deck',   gpio_pin: 12, cmd: OFF, active_history_id: 0, mode_set: 0)
+front  = Valve.create(name: 'Front',  gpio_pin: 16, cmd: OFF, active_history_id: 0, mode_set: 0)
+tomato = Valve.create(name: 'Tomato', gpio_pin: 18, cmd: OFF, active_history_id: 0, mode_set: 0)
 
 # production sprinkle set; keep updated as watering needs evolve.
 # ****************************** uncomment below for production sprinkle set ****************
@@ -62,10 +62,10 @@ tomato = Valve.create(name: 'Tomato', gpio_pin: 18, cmd: OFF, active_history_id:
 #     s.update(start_time: s.next_start_time)
 
 #     s = Sprinkle.create( time_input: "#{day} #{hour}:15 #{meridian}" , duration:  3, valve_id: front.id, state: IDLE ) #unless meridian == 12
-#     s.update(start_time: .next_start_time)
+#     s.update(start_time: s.next_start_time)
 
 #     s = Sprinkle.create( time_input: "#{day} #{hour}:20 #{meridian}" , duration:  5, valve_id: tomato.id, state: IDLE )
-#     s.update(start_time: st.next_start_time)
+#     s.update(start_time: s.next_start_time)
 #   end
 # end
 # ****************************** uncomment above for production sprinkle set ****************
@@ -89,6 +89,22 @@ ix = 2 # start first sprinkle 2 minutes from now.
 end
 # ****************************** uncomment above for test sprinkle set ****************
 
+# Overlapping sprinkle test set.
+# Loop through all 5 valves once.
+# s = Sprinkle.create( time_input: seed_time(1) , duration: 5, valve_id: atrium.id, state: IDLE )
+# s.update( start_time: s.next_start_time )
+
+# s = Sprinkle.create( time_input: seed_time(1) , duration: 4, valve_id: back.id, state: IDLE )
+# s.update( start_time: s.next_start_time )
+
+# s = Sprinkle.create( time_input: seed_time(1) , duration: 3, valve_id: deck.id, state: IDLE )
+# s.update( start_time: s.next_start_time )
+
+# s = Sprinkle.create( time_input: seed_time(1) , duration: 2, valve_id: front.id, state: IDLE )
+# s.update( start_time: s.next_start_time )
+
+# s = Sprinkle.create( time_input: seed_time(1) , duration: 1, valve_id: tomato.id, state: IDLE )
+# s.update( start_time: s.next_start_time )
 
 # minimal system test, fire atrium for one minute after 5 minute delay
 #Sprinkle.create( time_input: seed_time(5), duration: 1, valve_id: atrium.id)

@@ -24,8 +24,7 @@ class WaterManagerServer < Hyperloop::ServerOp
 
   # Scheduling options
   CRONTAB_SPRINKLE_ALL  = 0
-  CRONTAB_SPRINKLE_EACH = 1
-  DAEMON_SPRINKLE_EACH  = 2
+  DAEMON_MINUTE_HAND  = 1
 
   CRONTAB = 'lib/assets/crontab'
 
@@ -55,7 +54,7 @@ class WaterManagerServer < Hyperloop::ServerOp
   end
 
   def scheduling_options
-    %w{ CRONTAB_SPRINKLE_ALL CRONTAB_SPRINKLE_EACH DAEMON_SPRINKLE_EACH }[WaterManager.first.scheduling_option]
+    %w{ CRONTAB_SPRINKLE_ALL DAEMON_MINUTE_HAND }[WaterManager.first.scheduling_option]
   end
 
   def arm
@@ -63,15 +62,20 @@ class WaterManagerServer < Hyperloop::ServerOp
     case WaterManager.first.scheduling_option
     when CRONTAB_SPRINKLE_ALL
       install_crontab
-    when CRONTAB_SPRINKLE_EACH
-      install_minute_hand_crontab
-    when DAEMON_SPRINKLE_EACH
-      install_scheduling_daemon
+    when DAEMON_MINUTE_HAND
+      install_minute_hand_daemon
     end
   end
 
   def disarm
-    # log "Removing crontab\n"
+    log "Shut down scheduling option: #{scheduling_options}\n"
+    case WaterManager.first.scheduling_option
+    when CRONTAB_SPRINKLE_ALL
+      remove_crontab
+    when DAEMON_MINUTE_HAND
+      remove_minute_hand_daemon
+    end
+
     remove_crontab
     Valve.all.each do |v|
       # close only those valves that are open.
@@ -89,7 +93,6 @@ class WaterManagerServer < Hyperloop::ServerOp
     # log "Building crontab\n"
     f = File.open(CRONTAB, 'w')
     f.write "MAIL='keburgett@gmail.com'\n"
-    # f.write minute_hand_crontab_line
     # for each sprinkle, write a crontab entry for ON and OFF times.
     p = Porter.first.localhost_with_port # provides host:port combination
     sprinkle_agent_id = 99 # fUture update to use daemon, for now just a placeholder
@@ -114,19 +117,29 @@ class WaterManagerServer < Hyperloop::ServerOp
     system("rm lib/assets/crontab")
   end
 
-  def install_minute_hand_crontab
-    # log "Building crontab\n"
-    f = File.open(CRONTAB, 'w')
-    f.write "MAIL='keburgett@gmail.com'\n"
-    f.write minute_hand_crontab_line
+  def actuator_path
+    File.realdirpath('lib/tasks/minute_hand_daemon.rb')
+  end
+
+  SCALE_FACTOR = 1
+  PID_FILE_NAME = 'tmp/pids/minute_hand_daemon.pid'
+
+  def install_minute_hand_daemon
+    spawnee = "ruby #{actuator_path} #{SCALE_FACTOR} #{Porter.first.localhost_with_port} #{WaterManager.first.key} #{File.realdirpath('lib/tasks/minute_hand_actuator.sh')}"
+    log "spawn #{spawnee}\n"
+    pid = Process.spawn(spawnee)
+    f = File.open(PID_FILE_NAME, 'w')
+    f.write pid.to_s
+    log "#{PID_FILE_NAME}, pid --> #{pid}\n"
     f.close
   end
 
-  def minute_hand_crontab_line
-    "* * * * * sh /home/kenb/development/HyperAQ/lib/tasks/minute_hand_actuator.sh #{Porter.first.localhost_with_port} #{MinuteHand.first.id} #{WaterManager.first.key}\n"
-  end
-
-  def install_scheduling_daemon
+  def remove_minute_hand_daemon
+    lines = File.readlines(PID_FILE_NAME)
+    system("rm #{PID_FILE_NAME}")
+    pid = lines[0].to_i
+    system("kill -KILL #{pid}")
+    log "kill pid #{pid}\n"
   end
 
 end 

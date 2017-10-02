@@ -5,6 +5,7 @@ class CreateValves < ActiveRecord::Migration[5.1]
       t.integer :gpio_pin
       t.integer :active_history_id
       t.integer :cmd
+      t.integer :mode_set
 
       t.timestamps
     end

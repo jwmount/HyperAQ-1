@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(version: 20170902151006) do
   end
 
   create_table "minute_hands", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string "state"
+    t.integer "key"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -61,6 +61,7 @@ ActiveRecord::Schema.define(version: 20170902151006) do
     t.integer "gpio_pin"
     t.integer "active_history_id"
     t.integer "cmd"
+    t.integer "mode_set"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

@@ -9,11 +9,10 @@ class Sprinkle < ApplicationRecord
   
   validates :time_input, :duration, :valve_id, presence: true
 
-  # crontab format
-  # [Minute]     [hour]       [Day_of_the_Month]  [Month_of_the_Year] [Day_of_the_Week]
-  # parsed.min   parsed.hour  Time.now.mday       Time.now.mon        compute from(Time.now.wday and parsed value)
-  #                                                                   Time.now.wday <= parsed.wday
-  #                                                                     (parsed.wday - Time.now.wday)* 24 * 60 * 60
+  def stop_time
+    start_time + duration * 60
+  end
+                                                        
   if RUBY_ENGINE != 'opal'
     #   SU  MO  TU  WE  TH  FR  SA
     DAY_OF_WEEK_MAP =[
@@ -43,8 +42,6 @@ class Sprinkle < ApplicationRecord
     ACTIVE = 1
     NEXT = 2
 
-    
-    
     # LOGFILE = "log/sprinkle.log"
     # LOG_TIME = "%H:%M:%S "
 
@@ -79,10 +76,6 @@ class Sprinkle < ApplicationRecord
       answer
     end
 
-    def stop_time
-      start_time + duration * 60
-    end
-
     def manipulate_and_update(params)
       # Parameters: {"state"=>"0", "id"=>"9", "sprinkle"=>{"state"=>"0"}}
       new_state = params['state'].to_i
@@ -110,14 +103,33 @@ class Sprinkle < ApplicationRecord
     end
 
     def stop
+      valve.stop      
       update(state: IDLE)
       # log "sprinkle.stop #{valve.name}, #{state} #{states(state)}\n"
-      valve.stop
-      update(start_time: next_start_time)
-      # Mark the first row in the sprinkle table NEXT
-      Sprinkle.first.update(state: NEXT)
+      move_to_next_start_time
+      #update(start_time: next_start_time)
+      mark_next
       # Finally, prune any History(List) entries older than the PRUNE_INTERVAL
-      # List.prune      
+      # List.prune  Ok   
+    end
+
+    def minute_hand_start
+      start if state != ACTIVE
+    end
+
+    def minute_hand_stop
+      stop if state == ACTIVE
+    end
+
+    def move_to_next_start_time
+      Sprinkle.where("start_time < ?", Time.now).each do |sprinkle|
+        sprinkle.update(start_time: sprinkle.start_time + SECONDS_PER_WEEK)
+      end
+    end
+
+    def mark_next
+      # Mark the first row in the sprinkle table NEXT
+      Sprinkle.first.update(state: NEXT) if Sprinkle.first.state != ACTIVE
     end
 
     #answer a string formatted to crontab time standards.  Answer start_time if state is 1 (ACTIVE),
@@ -134,7 +146,7 @@ class Sprinkle < ApplicationRecord
       t.strftime(CRONTAB_STRFTIME)
     end
 
-    # answer a set of attributes as a string containing the 3 attributes in order
+    # answer a set of attributes as a string containing the 2 attributes in order
     def to_crontab_attributes(state)
       "#{id} #{state}"
     end
@@ -153,5 +165,6 @@ class Sprinkle < ApplicationRecord
       end
 
   end # RUBY_ENGINE
+
 
 end

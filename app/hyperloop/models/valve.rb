@@ -44,9 +44,12 @@ class Valve < ApplicationRecord
       def command(val)
         # record the valve's command state in the db
         update(cmd: val)
-        mode = "gpio -g mode #{gpio_pin} out"
+        if mode_set == 0
+          mode = "gpio -g mode #{gpio_pin} out"
+          system(mode)
+          mode_set = 1
+        end
         write = "gpio -g write #{gpio_pin} #{val}"
-        system(mode)
         system(write)
       end
 

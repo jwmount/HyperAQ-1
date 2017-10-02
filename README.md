@@ -74,7 +74,7 @@ Components
         * SprinkleRow
 
         At any point in time, there is only one Sprinkle marked Next(rose color).  That is when no sprinkle is in action, and the system is quiet.  The next sprinkle scheduled has the Next state.
-        When a sprinkle gets activated, its' state becomes Active(blue).  All other sprinkles are marked Idle(plain).  When an active sprinkle stops sprinkling, its' state goes to Idle, and its next_start_time attribute is updated to its next schedule on/off sequence, and it is sorted to the end of the list.
+        When a sprinkle gets activated, its' state becomes Active(blue).  All other sprinkles are marked Idle(plain).  When an active sprinkle stops sprinkling, its' state goes to Idle, and its next_start_time attribute is updated to its next scheduled on/off sequence, and it is sorted to the end of the list.
 
       * HistoryList
 

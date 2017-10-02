@@ -1,9 +1,8 @@
 class MinuteHandServer < Hyperloop::ServerOp
   
-  param :acting_user, nils: true
+  # param :acting_user, nils: true
   param :key
   dispatch_to { Hyperloop::Application }
-
 
   step do 
     minute_hand_update (params.key)
@@ -23,13 +22,15 @@ class MinuteHandServer < Hyperloop::ServerOp
     f.close
   end
   #
-  # manual valve update behavior
-  #
-  # All valve operations are toggles, so if a valve is ON, then a manual activation will turn it OFF.
-  #
+  
   def minute_hand_update(key)
     #iterate through sprinkles table...
     log "MinuteHandServer step minute_hand_update(#{key}), @#{log_time}\n"
+
+    params = {}
+    params[:key] = key
+    MinuteHand.first.manipulate_and_update(params)
+    return true
   end
 
 end 

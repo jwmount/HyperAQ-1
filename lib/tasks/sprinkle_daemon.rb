@@ -14,8 +14,6 @@ require 'rubygems'
 require 'rest_client'
 require 'json'
 
-
-
 FORMAT = "%a %d %b %l:%M %P"
 
 class SprinkleDaemon

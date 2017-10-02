@@ -15,6 +15,8 @@ class SprinkleRow < Hyperloop::Component
   render do
     TR(class: markup) do
       TD { params.sprinkle.start_time.strftime(SPRINKLE_TIME_FORMAT) }
+
+      TD { params.sprinkle.stop_time.strftime(SPRINKLE_TIME_FORMAT) }
     
       TD { params.sprinkle.time_input }    
     

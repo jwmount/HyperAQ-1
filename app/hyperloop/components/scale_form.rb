@@ -1,4 +1,6 @@
 class ScaleForm < Hyperloop::Component
+  def render
+  end
 end
 
 # <form>

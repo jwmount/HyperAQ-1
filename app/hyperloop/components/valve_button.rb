@@ -3,15 +3,10 @@ require 'models/valve'
 class ValveButton < Hyperloop::Component
   param :valve
 
-  before_mount do
-    @states = %w{ OFF ON }
-    @colors = %w{ btn-primary btn-success }
-  end
-
   def render
     LI do
       title = "Valve #{params.valve.name} is #{state}"
-      BUTTON(class: "btn #{color} navbar-btn", data: { toggle: "tooltip" , placement: 'bottom' }, title: title) do
+      BUTTON(class: "btn #{color} navbar-btn", data: { toggle: "tooltip"  }, title: title) do
         params.valve.name 
       end.on(:click) {command}
     end
@@ -24,12 +19,12 @@ class ValveButton < Hyperloop::Component
 
   # defines background color the button in OFF/ON states
   def color
-    @colors[params.valve.cmd]
+    %w{ btn-primary btn-success }[params.valve.cmd]
   end
 
   # defines text state for tooltip title
   def state
-    @states[params.valve.cmd]
+    %w{ OFF ON }[params.valve.cmd]
   end
 
 end 

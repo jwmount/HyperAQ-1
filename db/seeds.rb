@@ -40,33 +40,33 @@ Porter.create(host_name: 'not-yet-loaded', port_number: 9999)
 # front  = Valve.create(name: 'Front',  gpio_pin:16, cmd:0, bb_pin: 18, cpu2bb_color: 'white-brown', relay_module: 1, relay_index: 3)
 # tomato = Valve.create(name: 'Tomato', gpio_pin:18, cmd:0, bb_pin: 16, cpu2bb_color: 'orange',      relay_module: 1, relay_index: 2)
 
-atrium = Valve.create(name: 'Atrium', gpio_pin:  7, cmd: OFF, active_history_id: 0, mode_set: 0)
-back   = Valve.create(name: 'Back',   gpio_pin: 22, cmd: OFF, active_history_id: 0, mode_set: 0)
-deck   = Valve.create(name: 'Deck',   gpio_pin: 12, cmd: OFF, active_history_id: 0, mode_set: 0)
-front  = Valve.create(name: 'Front',  gpio_pin: 16, cmd: OFF, active_history_id: 0, mode_set: 0)
-tomato = Valve.create(name: 'Tomato', gpio_pin: 18, cmd: OFF, active_history_id: 0, mode_set: 0)
+atrium = Valve.create(name: 'Atrium', gpio_pin:  7, cmd: OFF, active_history_id: 0)
+back   = Valve.create(name: 'Back',   gpio_pin: 22, cmd: OFF, active_history_id: 0)
+deck   = Valve.create(name: 'Deck',   gpio_pin: 12, cmd: OFF, active_history_id: 0)
+front  = Valve.create(name: 'Front',  gpio_pin: 16, cmd: OFF, active_history_id: 0)
+tomato = Valve.create(name: 'Tomato', gpio_pin: 18, cmd: OFF, active_history_id: 0)
 
 # production sprinkle set; keep updated as watering needs evolve.
 # ****************************** uncomment below for production sprinkle set ****************
-hour = 7
-%w{ Sun Mon Tue Wed Thu Fri Sat }.each do |day|
-  %w{am pm}.each do |meridian|
-    s = Sprinkle.create( time_input: "#{day} #{hour}:00 #{meridian}" , duration:  3, valve_id: atrium.id, state: IDLE) #unless meridian == 12
-    s.update(start_time: s.next_start_time)
+# hour = 7
+# %w{ Sun Mon Tue Wed Thu Fri Sat }.each do |day|
+#   %w{am pm}.each do |meridian|
+#     s = Sprinkle.create( time_input: "#{day} #{hour}:00 #{meridian}" , duration:  3, valve_id: atrium.id, state: IDLE) #unless meridian == 12
+#     s.update(start_time: s.next_start_time)
 
-    s = Sprinkle.create( time_input: "#{day} #{hour}:05 #{meridian}" , duration:  3, valve_id: back.id, state: IDLE )
-    s.update(start_time: s.next_start_time)
+#     s = Sprinkle.create( time_input: "#{day} #{hour}:05 #{meridian}" , duration:  3, valve_id: back.id, state: IDLE )
+#     s.update(start_time: s.next_start_time)
 
-    s = Sprinkle.create( time_input: "#{day} #{hour}:10 #{meridian}" , duration:  3, valve_id: deck.id, state: IDLE ) unless meridian == 12
-    s.update(start_time: s.next_start_time)
+#     s = Sprinkle.create( time_input: "#{day} #{hour}:10 #{meridian}" , duration:  3, valve_id: deck.id, state: IDLE ) unless meridian == 12
+#     s.update(start_time: s.next_start_time)
 
-    s = Sprinkle.create( time_input: "#{day} #{hour}:15 #{meridian}" , duration:  3, valve_id: front.id, state: IDLE ) #unless meridian == 12
-    s.update(start_time: s.next_start_time)
+#     s = Sprinkle.create( time_input: "#{day} #{hour}:15 #{meridian}" , duration:  3, valve_id: front.id, state: IDLE ) #unless meridian == 12
+#     s.update(start_time: s.next_start_time)
 
-    s = Sprinkle.create( time_input: "#{day} #{hour}:20 #{meridian}" , duration:  5, valve_id: tomato.id, state: IDLE )
-    s.update(start_time: s.next_start_time)
-  end
-end
+#     s = Sprinkle.create( time_input: "#{day} #{hour}:20 #{meridian}" , duration:  5, valve_id: tomato.id, state: IDLE )
+#     s.update(start_time: s.next_start_time)
+#   end
+# end
 # ****************************** uncomment above for production sprinkle set ****************
 
 
@@ -78,14 +78,14 @@ end
 # testing sprinkle set; quick test of all 5 valves in 20 minutes
 # Sprinkle.create( time_input: seed_time(ix) , duration: 1, valve_id: 1 )
 # ****************************** uncomment below for test sprinkle set ****************
-# ix = 2 # start first sprinkle 2 minutes from now.
-# 2.times.each do
-#   Valve.all.each do |valve|
-#     s = Sprinkle.create( time_input: seed_time(ix) , duration: 1, valve_id: valve.id, state: IDLE )
-#     s.update( start_time: s.next_start_time )
-#     ix += 2
-#   end
-# end
+ix = 2 # start first sprinkle 2 minutes from now.
+2.times.each do
+  Valve.all.each do |valve|
+    s = Sprinkle.create( time_input: seed_time(ix) , duration: 1, valve_id: valve.id, state: IDLE )
+    s.update( start_time: s.next_start_time )
+    ix += 2
+  end
+end
 # ****************************** uncomment above for test sprinkle set ****************
 
 # Overlapping sprinkle test set.

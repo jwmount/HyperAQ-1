@@ -61,7 +61,6 @@ ActiveRecord::Schema.define(version: 20170902151006) do
     t.integer "gpio_pin"
     t.integer "active_history_id"
     t.integer "cmd"
-    t.integer "mode_set"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

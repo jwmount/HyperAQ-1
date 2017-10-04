@@ -6,7 +6,10 @@ class Navbar < Hyperloop::Component
       DIV(class: 'container-fluid') do
         PorterStatus {}
         WaterStatus {}
-        ScaleForm {}
+        # if Rails.env.development?
+        #   EventGeneratorRadioButtons{}
+        #   ScaleSelect {}
+        # end
         TitleNav {}
         ValveButtons {}
       end

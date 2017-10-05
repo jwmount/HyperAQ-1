@@ -209,8 +209,8 @@ class VerifyEnvironment
 
   def valid_location
     if File.exist?("#{location}/Gemfile")
-      if !Dir.exist?("#{location}/pids")
-        Dir.mkdir('pids')
+      if !Dir.exist?("#{location}/tmp/pids")
+        Dir.mkdir("#{location}/tmp/pids")
       end
       answer = true
     else

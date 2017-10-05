@@ -6,3 +6,8 @@ Hyperloop.configuration do |config|
   config.prerendering = :off
 end
 
+Hyperloop.class_eval do
+  def self.on_server?
+    Rails.const_defined?('Server') || (Rails.const_defined?('Puma') && File.basename($0).present? && File.basename($0).include?('puma'))
+  end
+end

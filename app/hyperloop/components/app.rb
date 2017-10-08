@@ -1,9 +1,10 @@
-
+# App was Component,
   class App < Hyperloop::Component
+# Now App is a router, works either way
+#  class App < Hyperloop::Component
 
     # The top of the component tree.
-
-    def render
+    def render 
       UL do
         Navbar {}
         Layout {}
@@ -12,5 +13,5 @@
       #   DIV { "loading..." } # or whatever you want in here
       # end
     end
+  
   end
-

@@ -103,6 +103,9 @@ Setup
 
     * edit the config/database.yml file to replace my working credentials with yours. Mysql is used, so the mysql server must be installed prior to use.
 
+    * edit line 2 of the dev-start.sh file to replace the working credentials there with yours.  Veryify the --pidfile path is valid for your environment.  Skip this step if you plan to use the ruby server.      
+    # puma --environment development --daemon --port 2017 --pidfile /home/kenb/development/HyperAQ/tmp/pids/development-2017.pid
+
     * execute the shell command 'dev-run.sh', which will clear all log files, run bundle update, drop the database and rebuild it, including seeds.rb, and finally launch puma in development mode.  
 
     * you can then press the Standby button and activate the sprinkles in the database, which will start to execute on their appointed schedule (the seeds.rb file contains code that will build a database of 10 sprinkles, starting 2 minutes after seeds.rb is run.  This is to provide a convenient set of time-dependent sprinkles. Once all run, then take down the server and run the script again to get a new sprinkle set.) You should be able to see the valve buttons light up to track scheduled sprinkles at work, and the state color of the sprinkle table will cycle between Idle, Next, and Active, while the next_start_time field will update to the next schedule.

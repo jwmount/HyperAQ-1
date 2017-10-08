@@ -104,7 +104,7 @@ Setup
     * edit the config/database.yml file to replace my working credentials with yours. Mysql is used, so the mysql server must be installed prior to use.
 
     * edit line 2 of the dev-start.sh file to replace the working credentials there with yours.  Veryify the --pidfile path is valid for your environment.  Skip this step if you plan to use the ruby server.      
-    # puma --environment development --daemon --port 2017 --pidfile /home/kenb/development/HyperAQ/tmp/pids/development-2017.pid
+   
 
     * execute the shell command 'dev-run.sh', which will clear all log files, run bundle update, drop the database and rebuild it, including seeds.rb, and finally launch puma in development mode.  
 
